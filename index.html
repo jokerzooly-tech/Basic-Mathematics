@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رياضيات متقطعة | cipher ⁷³</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background: #f1f5f9; color: #0f172a; transition: 0.3s; }
+        body.dark { background: #0f172a; color: #e2e8f0; }
+        .top-bar { background: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        body.dark .top-bar { background: #1e293b; }
+        .logo h1 { font-size: 28px; background: linear-gradient(135deg, #3b82f6, #06b6d4); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .lang-switch { display: flex; gap: 8px; background: #e2e8f0; padding: 4px; border-radius: 40px; }
+        body.dark .lang-switch { background: #334155; }
+        .lang-btn { padding: 6px 18px; border: none; border-radius: 40px; cursor: pointer; font-weight: 600; background: transparent; transition: 0.3s; }
+        .lang-btn.active { background: #3b82f6; color: white; }
+        .lecture-selector { background: #e2e8f0; padding: 6px 16px; border-radius: 40px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        body.dark .lecture-selector { background: #334155; }
+        select { padding: 8px 12px; border-radius: 30px; border: none; font-weight: 500; cursor: pointer; }
+        .theme-btn { background: #e2e8f0; border: none; padding: 8px 16px; border-radius: 40px; cursor: pointer; font-weight: 600; }
+        body.dark .theme-btn { background: #334155; color: white; }
+        nav { background: white; padding: 12px 32px; display: flex; justify-content: center; gap: 20px; border-bottom: 1px solid #e2e8f0; position: sticky; top: 78px; z-index: 99; }
+        body.dark nav { background: #1e293b; border-bottom-color: #334155; }
+        .nav-btn { padding: 10px 28px; border: none; border-radius: 40px; cursor: pointer; font-weight: 600; font-size: 15px; background: transparent; transition: 0.3s; }
+        body.dark .nav-btn { color: #cbd5e1; }
+        .nav-btn.active { background: #3b82f6; color: white; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
+        .card { background: white; border-radius: 24px; padding: 28px; margin-bottom: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        body.dark .card { background: #1e293b; border-color: #334155; }
+        .card h2 { font-size: 24px; margin-bottom: 16px; color: #3b82f6; }
+        .exam-type-group { display: flex; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
+        .exam-type-btn { padding: 10px 24px; border: none; border-radius: 40px; cursor: pointer; font-weight: 600; background: #e2e8f0; transition: 0.3s; }
+        .exam-type-btn.active { background: #3b82f6; color: white; }
+        .refresh-btn, .submit-btn { background: #10b981; color: white; border: none; padding: 12px 28px; border-radius: 50px; cursor: pointer; font-weight: 600; margin-top: 10px; margin-right: 12px; }
+        .submit-btn { background: #3b82f6; }
+        .question-block { background: #f8fafc; padding: 20px; border-radius: 20px; margin-bottom: 20px; }
+        body.dark .question-block { background: #0f172a; }
+        .question-text { font-weight: 700; font-size: 17px; margin-bottom: 15px; }
+        .options { display: flex; flex-wrap: wrap; gap: 20px; margin: 12px 0; }
+        .option-label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        textarea { width: 100%; padding: 12px; border-radius: 16px; border: 1px solid #cbd5e1; background: white; margin: 10px 0; }
+        body.dark textarea { background: #1e293b; border-color: #475569; color: white; }
+        .result-box { background: #e0f2fe; padding: 20px; border-radius: 20px; margin-top: 20px; text-align: center; }
+        body.dark .result-box { background: #0284c7; }
+        .mistake-item, .essay-compare { text-align: right; margin-bottom: 15px; padding: 12px; background: #f1f5f9; border-radius: 16px; }
+        body.dark .mistake-item, body.dark .essay-compare { background: #1e293b; }
+        .user-ans { color: #ef4444; border-right: 3px solid #ef4444; padding-right: 12px; margin: 8px 0; }
+        .correct-ans { color: #10b981; border-right: 3px solid #10b981; padding-right: 12px; margin: 8px 0; }
+        .summary-box { background: #f8fafc; padding: 20px; border-radius: 20px; margin-bottom: 20px; line-height: 1.8; }
+        body.dark .summary-box { background: #0f172a; }
+        .contact-card { background: linear-gradient(135deg, #0f172a, #020617); border-radius: 28px; padding: 32px; text-align: center; color: white; margin-top: 40px; }
+        .social-icons { display: flex; justify-content: center; gap: 35px; margin: 20px 0; }
+        .social-icons a { font-size: 38px; transition: 0.2s; }
+        footer { text-align: center; padding: 30px; border-top: 1px solid #e2e8f0; margin-top: 50px; }
+        .ust { font-size: 11px; opacity: 0.6; margin-top: 6px; }
+        @media (max-width: 700px) { .top-bar { flex-direction: column; text-align: center; } .card { padding: 18px; } }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="logo"><h1>cipher ⁷³</h1></div>
+    <div class="controls">
+        <div class="lang-switch">
+            <button class="lang-btn active" data-lang="ar">العربية</button>
+            <button class="lang-btn" data-lang="en">English</button>
+        </div>
+        <div class="lecture-selector">
+            <label id="lectureLabel">📚 اختر المحاضرة:</label>
+            <select id="lectureSelect">
+                <option value="all">📖 شامل (جميع المحاضرات)</option>
+                <option value="lec1">محاضرة 1: منطق العبارات</option>
+                <option value="lec2">محاضرة 2: التكافؤ المنطقي</option>
+                <option value="lec3">محاضرة 3: المسندات والمُكممات</option>
+                <option value="lec4">محاضرة 4: الدوال</option>
+                <option value="lec5">محاضرة 5: الاستقراء الرياضي</option>
+                <option value="lec6">محاضرة 6: نظرية المجموعات</option>
+                <option value="lec7">محاضرة 7: عمليات المجموعات</option>
+                <option value="lec9">محاضرة 9: العلاقات</option>
+                <option value="lec11">محاضرة 11: تركيب الدوال</option>
+            </select>
+        </div>
+        <button class="theme-btn" onclick="document.body.classList.toggle('dark')">🌙</button>
+    </div>
+</div>
+
+<nav>
+    <button class="nav-btn active" data-page="home"><i class="fas fa-home"></i> <span class="nav-ar">الرئيسية</span><span class="nav-en" style="display:none;">Home</span></button>
+    <button class="nav-btn" data-page="summary"><i class="fas fa-book"></i> <span class="nav-ar">الملخصات</span><span class="nav-en" style="display:none;">Summaries</span></button>
+    <button class="nav-btn" data-page="exam"><i class="fas fa-tasks"></i> <span class="nav-ar">الامتحانات</span><span class="nav-en" style="display:none;">Exams</span></button>
+</nav>
+
+<div class="container" id="main-container"></div>
+
+<footer>
+    <p>© 2026 cipher ⁷³ | <span class="ar">جميع الحقوق محفوظة</span><span class="en" style="display:none;">All Rights Reserved</span></p>
+    <p class="ust">ust</p>
+</footer>
+
+<script>
+// ==================== المتغيرات العامة ====================
+let currentLang = "ar";
+let currentPage = "home";
+let currentLecture = "all";
+let currentExamType = "mcq";
+let currentMcqQuestions = [];
+let currentEssayQuestions = [];
+
+// ==================== تبديل اللغة ====================
+function updateLanguage() {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.dataset.lang === currentLang) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    document.querySelectorAll('.nav-ar').forEach(el => el.style.display = currentLang === 'ar' ? 'inline' : 'none');
+    document.querySelectorAll('.nav-en').forEach(el => el.style.display = currentLang === 'en' ? 'inline' : 'none');
+    document.querySelectorAll('.ar').forEach(el => el.style.display = currentLang === 'ar' ? 'inline' : 'none');
+    document.querySelectorAll('.en').forEach(el => el.style.display = currentLang === 'en' ? 'inline' : 'none');
+    
+    const lectureLabel = document.getElementById('lectureLabel');
+    if (lectureLabel) lectureLabel.innerText = currentLang === "ar" ? "📚 اختر المحاضرة:" : "📚 Select Lecture:";
+    
+    const select = document.getElementById('lectureSelect');
+    const options = {
+        all: { ar: "📖 شامل (جميع المحاضرات)", en: "📖 Comprehensive (All Lectures)" },
+        lec1: { ar: "محاضرة 1: منطق العبارات", en: "Lecture 1: Logic of Compound Statements" },
+        lec2: { ar: "محاضرة 2: التكافؤ المنطقي", en: "Lecture 2: Logical Equivalence" },
+        lec3: { ar: "محاضرة 3: المسندات والمُكممات", en: "Lecture 3: Predicates & Quantifiers" },
+        lec4: { ar: "محاضرة 4: الدوال", en: "Lecture 4: Functions" },
+        lec5: { ar: "محاضرة 5: الاستقراء الرياضي", en: "Lecture 5: Mathematical Induction" },
+        lec6: { ar: "محاضرة 6: نظرية المجموعات", en: "Lecture 6: Set Theory" },
+        lec7: { ar: "محاضرة 7: عمليات المجموعات", en: "Lecture 7: Set Operations" },
+        lec9: { ar: "محاضرة 9: العلاقات", en: "Lecture 9: Relations" },
+        lec11: { ar: "محاضرة 11: تركيب الدوال", en: "Lecture 11: Function Composition" }
+    };
+    for (let i = 0; i < select.options.length; i++) {
+        const val = select.options[i].value;
+        if (options[val]) select.options[i].text = options[val][currentLang];
+    }
+    
+    if (currentPage === 'home') renderHome();
+    else if (currentPage === 'summary') renderSummary();
+    else if (currentPage === 'exam') renderExam();
+}
+// ==================== الملخصات (باللغتين) ====================
+const summariesData = {
+    lec1: { ar: "القضية (Proposition) هي جملة خبرية تحتمل الصحة أو الخطأ. نرمز للقضايا بـ p, q, r. جدول الصواب يوضح جميع احتمالات الصحة والخطأ. عدد الصفوف = 2ⁿ حيث n عدد القضايا. النفي (~p): إذا كانت p صحيحة فإن ~p خاطئة والعكس. العطف (∧): p∧q صحيحة فقط عندما p و q كلاهما صحيحان. الفصل (∨): p∨q خاطئة فقط عندما p و q كلاهما خاطئان.", en: "A proposition is a declarative sentence that is either true or false. We denote propositions by p, q, r. Truth tables show all truth value possibilities. Number of rows = 2ⁿ where n is number of propositions. Negation (~p): if p is true then ~p is false. Conjunction (∧): p∧q is true only when both p and q are true. Disjunction (∨): p∨q is false only when both p and q are false." },
+    lec2: { ar: "العبارة الشرطية p→q (إذا p فإن q) تكون خاطئة فقط عندما p صحيحة و q خاطئة. العبارة الثنائية الشرطية p↔q (p إذا وفقط إذا q) تكون صحيحة عندما p و q لهما نفس قيمة الصواب. المعكوس (Converse): q→p. المعكوس المعاكس (Inverse): ~p→~q. العكس (Contrapositive): ~q→~p. العكس مكافئ منطقياً للعبارة الأصلية.", en: "Conditional p→q (if p then q) is false only when p is true and q is false. Biconditional p↔q (p if and only if q) is true when p and q have the same truth value. Converse: q→p. Inverse: ~p→~q. Contrapositive: ~q→~p. The contrapositive is logically equivalent to the original statement." },
+    lec3: { ar: "المسند (Predicate) هو جملة تحتوي على متغير وتصبح قضية عند تعويض قيمة للمتغير. المسور العام (∀) يعني 'لكل'، والمسور الوجودي (∃) يعني 'يوجد'. نفي ∀x P(x) هو ∃x ~P(x). نفي ∃x P(x) هو ∀x ~P(x).", en: "A predicate is a sentence containing a variable that becomes a proposition when a value is substituted. Universal quantifier (∀) means 'for all'. Existential quantifier (∃) means 'there exists'. Negation of ∀x P(x) is ∃x ~P(x). Negation of ∃x P(x) is ∀x ~P(x)." },
+    lec4: { ar: "الدالة f: X→Y هي علاقة تربط كل عنصر في X (المجال) بعنصر واحد فقط في Y (المجال المقابل). المدى (Range) هو مجموعة الصور الفعلية. دالة واحد لواحد (Injective): إذا f(x₁)=f(x₂) فإن x₁=x₂. دالة شاملة (Surjective): المجال المقابل = المدى. دالة تقابل (Bijective): واحد لواحد وشاملة.", en: "Function f: X→Y associates each element in X (domain) with exactly one element in Y (codomain). Range is the set of actual images. Injective: f(x₁)=f(x₂) ⇒ x₁=x₂. Surjective: codomain = range. Bijective: both injective and surjective." },
+    lec5: { ar: "الاستقراء الرياضي: لإثبات أن P(n) صحيحة لكل n≥1: 1) إثبات P(1) صحيحة (الأساس). 2) افتراض أن P(k) صحيحة (الفرضية). 3) إثبات أن P(k+1) صحيحة (الخطوة). مثال: إثبات 1+2+...+n = n(n+1)/2.", en: "Mathematical Induction: To prove P(n) true for all n≥1: 1) Prove P(1) is true (base case). 2) Assume P(k) is true (inductive hypothesis). 3) Prove P(k+1) is true (inductive step). Example: Prove 1+2+...+n = n(n+1)/2." },
+    lec6: { ar: "المجموعة هي مجموعة من العناصر المحددة. A⊆B إذا كان كل عنصر في A موجود في B. A⊂B (جزئية حقيقية) إذا A⊆B و A≠B. المجموعة الخالية ∅ هي مجموعة جزئية من كل مجموعة. ترتيب المجموعة |S| هو عدد عناصرها. مجموعة القوى P(A) هي مجموعة جميع المجموعات الجزئية لـ A، وعددها 2ⁿ.", en: "A set is a collection of distinct objects. A⊆B if every element of A is in B. A⊂B (proper subset) if A⊆B and A≠B. Empty set ∅ is a subset of every set. Cardinality |S| is the number of elements. Power set P(A) is the set of all subsets of A, with size 2ⁿ." },
+    lec7: { ar: "اتحاد المجموعات: A∪B = {x: x∈A أو x∈B}. تقاطع المجموعات: A∩B = {x: x∈A و x∈B}. الفرق: A-B = {x: x∈A و x∉B}. المتمم: A' = U-A. الفرق المتناظر: AΔB = (A-B)∪(B-A). قوانين دي مورجان: (A∪B)' = A'∩B' و (A∩B)' = A'∪B'.", en: "Union: A∪B = {x: x∈A or x∈B}. Intersection: A∩B = {x: x∈A and x∈B}. Difference: A-B = {x: x∈A and x∉B}. Complement: A' = U-A. Symmetric difference: AΔB = (A-B)∪(B-A). De Morgan's Laws: (A∪B)' = A'∩B' and (A∩B)' = A'∪B'." },
+    lec9: { ar: "علاقة R على A: انعكاسية إذا (a,a)∈R لكل a∈A. تناظرية إذا (a,b)∈R فإن (b,a)∈R. متعدية إذا (a,b)∈R و (b,c)∈R فإن (a,c)∈R. علاقة التكافؤ هي علاقة انعكاسية وتناظرية ومتعدية. مثال: علاقة '=' هي علاقة تكافؤ.", en: "Relation R on A: Reflexive if (a,a)∈R for all a∈A. Symmetric if (a,b)∈R implies (b,a)∈R. Transitive if (a,b)∈R and (b,c)∈R implies (a,c)∈R. Equivalence relation is reflexive, symmetric, and transitive. Example: equality '=' is an equivalence relation." },
+    lec11: { ar: "تركيب الدوال: (f∘g)(x) = f(g(x)). شروط التركيب: مدى g ⊆ مجال f. الدالة المحايدة I(x)=x تحقق: f∘I = f و I∘f = f. معكوس الدالة: إذا كانت f تقابلاً، فإن f⁻¹(y)=x حيث f(x)=y.", en: "Function composition: (f∘g)(x) = f(g(x)). Condition: range of g ⊆ domain of f. Identity function I(x)=x satisfies: f∘I = f and I∘f = f. Inverse function: if f is bijective, f⁻¹(y)=x where f(x)=y." }
+};
+
+// ==================== أسئلة MCQ (باللغتين) ====================
+const mcqBank = {
+    lec1: [
+        { text: { ar: "ما هي القضية (Proposition)؟", en: "What is a proposition?" }, options: { ar: ["جملة خبرية تحتمل الصحة أو الخطأ", "جملة أمرية", "سؤال", "تعجب"], en: ["Declarative sentence that is true or false", "Imperative sentence", "Question", "Exclamation"] }, correct: { ar: "جملة خبرية تحتمل الصحة أو الخطأ", en: "Declarative sentence that is true or false" } },
+        { text: { ar: "إذا كانت p صحيحة، فإن ~p تكون:", en: "If p is true, then ~p is:" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "مكافئة لـ p"], en: ["True", "False", "Undefined", "Equivalent to p"] }, correct: { ar: "خاطئة", en: "False" } },
+        { text: { ar: "عدد الصفوف في جدول الصواب لعبارة تحتوي على 3 متغيرات هو:", en: "Number of rows in truth table for 3 variables is:" }, options: { ar: ["4", "6", "8", "16"], en: ["4", "6", "8", "16"] }, correct: { ar: "8", en: "8" } },
+        { text: { ar: "العبارة p ∧ q تكون صحيحة فقط عندما:", en: "p ∧ q is true only when:" }, options: { ar: ["p صحيحة و q صحيحة", "p صحيحة و q خاطئة", "p خاطئة و q صحيحة", "p خاطئة و q خاطئة"], en: ["p true and q true", "p true and q false", "p false and q true", "p false and q false"] }, correct: { ar: "p صحيحة و q صحيحة", en: "p true and q true" } },
+        { text: { ar: "الرمز ∨ يعني:", en: "The symbol ∨ means:" }, options: { ar: ["و (عطف)", "أو (فصل)", "ليس (نفي)", "إذاً (شرط)"], en: ["AND (conjunction)", "OR (disjunction)", "NOT (negation)", "IF-THEN (conditional)"] }, correct: { ar: "أو (فصل)", en: "OR (disjunction)" } }
+    ],
+    lec2: [
+        { text: { ar: "العبارة الشرطية p → q تكون خاطئة فقط عندما:", en: "The conditional p → q is false only when:" }, options: { ar: ["p صحيحة و q صحيحة", "p صحيحة و q خاطئة", "p خاطئة و q صحيحة", "p خاطئة و q خاطئة"], en: ["p true and q true", "p true and q false", "p false and q true", "p false and q false"] }, correct: { ar: "p صحيحة و q خاطئة", en: "p true and q false" } },
+        { text: { ar: "المعاكس (Contrapositive) للعبارة p → q هو:", en: "The contrapositive of p → q is:" }, options: { ar: ["q → p", "~p → ~q", "~q → ~p", "p → ~q"], en: ["q → p", "~p → ~q", "~q → ~p", "p → ~q"] }, correct: { ar: "~q → ~p", en: "~q → ~p" } },
+        { text: { ar: "الطوطولوجيا (Tautology) هي عبارة:", en: "A tautology is a statement that is:" }, options: { ar: ["صحيحة دائماً", "خاطئة دائماً", "صحيحة أحياناً", "ليست قضية"], en: ["Always true", "Always false", "Sometimes true", "Not a proposition"] }, correct: { ar: "صحيحة دائماً", en: "Always true" } },
+        { text: { ar: "أي من التالي يعتبر طوطولوجيا؟", en: "Which of the following is a tautology?" }, options: { ar: ["p ∧ ~p", "p ∨ ~p", "p → ~p", "~p → p"], en: ["p ∧ ~p", "p ∨ ~p", "p → ~p", "~p → p"] }, correct: { ar: "p ∨ ~p", en: "p ∨ ~p" } },
+        { text: { ar: "العبارة p ↔ q تكون صحيحة عندما:", en: "p ↔ q is true when:" }, options: { ar: ["p و q مختلفان", "p و q متماثلان", "p صحيحة فقط", "q صحيحة فقط"], en: ["p and q are different", "p and q are the same", "p is true only", "q is true only"] }, correct: { ar: "p و q متماثلان", en: "p and q are the same" } }
+    ],
+    lec3: [
+        { text: { ar: "الرمز ∀ يعني:", en: "The symbol ∀ means:" }, options: { ar: ["يوجد", "لكل", "بعض", "لا يوجد"], en: ["There exists", "For all", "Some", "There is no"] }, correct: { ar: "لكل", en: "For all" } },
+        { text: { ar: "الرمز ∃ يعني:", en: "The symbol ∃ means:" }, options: { ar: ["يوجد", "لكل", "بعض", "لا يوجد"], en: ["There exists", "For all", "Some", "There is no"] }, correct: { ar: "يوجد", en: "There exists" } },
+        { text: { ar: "نفي العبارة ∀x P(x) هو:", en: "The negation of ∀x P(x) is:" }, options: { ar: ["∀x ~P(x)", "∃x ~P(x)", "~∃x P(x)", "∃x P(x)"], en: ["∀x ~P(x)", "∃x ~P(x)", "~∃x P(x)", "∃x P(x)"] }, correct: { ar: "∃x ~P(x)", en: "∃x ~P(x)" } },
+        { text: { ar: "نفي العبارة ∃x P(x) هو:", en: "The negation of ∃x P(x) is:" }, options: { ar: ["∀x ~P(x)", "∃x ~P(x)", "~∀x P(x)", "∀x P(x)"], en: ["∀x ~P(x)", "∃x ~P(x)", "~∀x P(x)", "∀x P(x)"] }, correct: { ar: "∀x ~P(x)", en: "∀x ~P(x)" } }
+    ],
+    lec4: [
+        { text: { ar: "الدالة f: X→Y تكون واحد لواحد (Injective) إذا:", en: "A function f: X→Y is injective if:" }, options: { ar: ["f(x₁)=f(x₂) ⇒ x₁=x₂", "كل y∈Y يوجد x∈X", "المجال = المدى", "الدالة متصلة"], en: ["f(x₁)=f(x₂) ⇒ x₁=x₂", "Every y∈Y has x∈X", "Domain = Range", "Function is continuous"] }, correct: { ar: "f(x₁)=f(x₂) ⇒ x₁=x₂", en: "f(x₁)=f(x₂) ⇒ x₁=x₂" } },
+        { text: { ar: "إذا كانت f(x)=2x-1، فإن f(3) يساوي:", en: "If f(x)=2x-1, then f(3) equals:" }, options: { ar: ["3", "4", "5", "6"], en: ["3", "4", "5", "6"] }, correct: { ar: "5", en: "5" } }
+    ],
+    lec5: [
+        { text: { ar: "الخطوة الأولى في الاستقراء الرياضي هي:", en: "The first step in mathematical induction is:" }, options: { ar: ["إثبات P(1) صحيحة", "افتراض P(k) صحيحة", "إثبات P(k+1) صحيحة", "كتابة النتيجة"], en: ["Prove P(1) is true", "Assume P(k) is true", "Prove P(k+1) is true", "Write conclusion"] }, correct: { ar: "إثبات P(1) صحيحة", en: "Prove P(1) is true" } }
+    ],
+    lec6: [
+        { text: { ar: "إذا كان A = {1,2} و B = {1,2,3}، فإن:", en: "If A = {1,2} and B = {1,2,3}, then:" }, options: { ar: ["A⊂B", "B⊂A", "A=B", "A∩B=∅"], en: ["A⊂B", "B⊂A", "A=B", "A∩B=∅"] }, correct: { ar: "A⊂B", en: "A⊂B" } },
+        { text: { ar: "إذا كان |A| = 4، فإن |P(A)| (مجموعة القوى) هو:", en: "If |A| = 4, then |P(A)| (power set) is:" }, options: { ar: ["4", "8", "12", "16"], en: ["4", "8", "12", "16"] }, correct: { ar: "16", en: "16" } }
+    ],
+    lec7: [
+        { text: { ar: "A ∪ B تحتوي على العناصر التي:", en: "A ∪ B contains elements that are:" }, options: { ar: ["في A أو B", "في A و B", "في A فقط", "في B فقط"], en: ["In A or B", "In A and B", "In A only", "In B only"] }, correct: { ar: "في A أو B", en: "In A or B" } },
+        { text: { ar: "قانون دي مورجان الأول ينص: (A ∪ B)' =", en: "De Morgan's first law states: (A ∪ B)' =" }, options: { ar: ["A' ∩ B'", "A' ∪ B'", "A ∩ B", "A ∪ B"], en: ["A' ∩ B'", "A' ∪ B'", "A ∩ B", "A ∪ B"] }, correct: { ar: "A' ∩ B'", en: "A' ∩ B'" } }
+    ],
+    lec9: [
+        { text: { ar: "علاقة التكافؤ هي علاقة:", en: "An equivalence relation is:" }, options: { ar: ["انعكاسية وتناظرية ومتعدية", "انعكاسية فقط", "تناظرية فقط", "متعدية فقط"], en: ["Reflexive, symmetric, transitive", "Reflexive only", "Symmetric only", "Transitive only"] }, correct: { ar: "انعكاسية وتناظرية ومتعدية", en: "Reflexive, symmetric, transitive" } }
+    ],
+    lec11: [
+        { text: { ar: "تركيب الدوال (f∘g)(x) يساوي:", en: "Function composition (f∘g)(x) equals:" }, options: { ar: ["f(g(x))", "g(f(x))", "f(x)+g(x)", "f(x)×g(x)"], en: ["f(g(x))", "g(f(x))", "f(x)+g(x)", "f(x)×g(x)"] }, correct: { ar: "f(g(x))", en: "f(g(x))" } }
+    ]
+};
+
+// دمج جميع أسئلة MCQ
+mcqBank.all = [
+    ...mcqBank.lec1, ...mcqBank.lec2, ...mcqBank.lec3,
+    ...mcqBank.lec4, ...mcqBank.lec5, ...mcqBank.lec6,
+    ...mcqBank.lec7, ...mcqBank.lec9, ...mcqBank.lec11
+];
+// ==================== الأسئلة المقالية (Essay) - باللغتين ====================
+const essayBank = {
+    lec1: [
+        { text: { ar: "عرف القضية (Proposition) مع إعطاء مثالين.", en: "Define proposition and give two examples." }, modelAnswer: { ar: "القضية هي جملة خبرية تحتمل الصحة أو الخطأ. مثال: '5+3=8' (صحيحة)، 'باريس عاصمة إنجلترا' (خاطئة).", en: "A proposition is a declarative sentence that is either true or false. Example: '5+3=8' (true), 'Paris is the capital of England' (false)." } },
+        { text: { ar: "أنشئ جدول الصواب للعبارة p ∧ q.", en: "Construct the truth table for p ∧ q." }, modelAnswer: { ar: "p q | p∧q\nص ص | ص\nص خ | خ\nخ ص | خ\nخ خ | خ", en: "p q | p∧q\nT T | T\nT F | F\nF T | F\nF F | F" } },
+        { text: { ar: "اشرح الفرق بين العطف (∧) والفصل (∨).", en: "Explain the difference between conjunction (∧) and disjunction (∨)." }, modelAnswer: { ar: "العطف (p∧q) يكون صحيحاً فقط عندما يكون كل من p و q صحيحين. الفصل (p∨q) يكون صحيحاً عندما يكون أحدهما على الأقل صحيحاً.", en: "Conjunction (p∧q) is true only when both p and q are true. Disjunction (p∨q) is true when at least one of p or q is true." } },
+        { text: { ar: "أثبت أن p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) باستخدام جدول الصواب.", en: "Prove that p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) using truth table." }, modelAnswer: { ar: "ننشئ جدول الصواب لجميع الاحتمالات (8 صفوف). نجد أن قيم p∧(q∨r) تساوي قيم (p∧q)∨(p∧r) في جميع الصفوف.", en: "Construct truth table for all possibilities (8 rows). The values of p∧(q∨r) equal (p∧q)∨(p∧r) in all rows." } },
+        { text: { ar: "ما هو عدد الصفوف في جدول الصواب لعبارة تحتوي على 4 متغيرات؟ ولماذا؟", en: "How many rows in a truth table for 4 variables? Why?" }, modelAnswer: { ar: "16 صفاً، لأن عدد الصفوف = 2ⁿ حيث n عدد المتغيرات، 2⁴ = 16.", en: "16 rows, because number of rows = 2ⁿ where n is number of variables, 2⁴ = 16." } },
+        { text: { ar: "أعط مثالاً على عبارة مركبة من ثلاث متغيرات واكتب جدول الصواب الخاص بها.", en: "Give an example of a compound statement with three variables and write its truth table." }, modelAnswer: { ar: "p ∧ (q ∨ r). الجدول يحتوي على 8 صفوف.", en: "p ∧ (q ∨ r). The table has 8 rows." } },
+        { text: { ar: "ما الفرق بين القضية البسيطة والقضية المركبة؟", en: "What is the difference between simple and compound propositions?" }, modelAnswer: { ar: "القضية البسيطة لا تحتوي على روابط منطقية، بينما القضية المركبة تتكون من قضايا بسيطة مرتبطة بروابط مثل ∧، ∨، →، ↔.", en: "Simple proposition contains no logical connectives, while compound proposition consists of simple propositions connected by connectives like ∧, ∨, →, ↔." } },
+        { text: { ar: "إذا كانت p صحيحة و q خاطئة، فما قيمة (p ∨ q) ∧ ~p؟", en: "If p is true and q is false, what is the value of (p ∨ q) ∧ ~p?" }, modelAnswer: { ar: "(p∨q) صحيحة لأن p صحيحة، ~p خاطئة، إذن (صحيحة ∧ خاطئة) = خاطئة.", en: "(p∨q) is true because p is true, ~p is false, so (true ∧ false) = false." } },
+        { text: { ar: "أكتب جدول الصواب للعبارة p ⊕ q (XOR - الفصل الحصري).", en: "Write the truth table for p ⊕ q (XOR - exclusive or)." }, modelAnswer: { ar: "p q | p⊕q\nص ص | خ\nص خ | ص\nخ ص | ص\nخ خ | خ", en: "p q | p⊕q\nT T | F\nT F | T\nF T | T\nF F | F" } },
+        { text: { ar: "ما هي شروط كون الجملة قضية؟", en: "What are the conditions for a sentence to be a proposition?" }, modelAnswer: { ar: "أن تكون جملة خبرية، وأن تحتمل الصحة أو الخطأ (وليس كليهما).", en: "It must be a declarative sentence, and it must be either true or false (but not both)." } }
+    ],
+    lec2: [
+        { text: { ar: "ما هي الطوطولوجيا (Tautology)؟ أعط مثالاً.", en: "What is a tautology? Give an example." }, modelAnswer: { ar: "الطوطولوجيا هي عبارة صحيحة دائماً. مثال: p ∨ ¬p.", en: "A tautology is a statement that is always true. Example: p ∨ ¬p." } },
+        { text: { ar: "اذكر وأثبت قانون دي مورجان الأول في المنطق: ¬(p∧q) ≡ ¬p ∨ ¬q.", en: "State and prove De Morgan's first law: ¬(p∧q) ≡ ¬p ∨ ¬q." }, modelAnswer: { ar: "نستخدم جدول الصواب. p q | p∧q | ¬(p∧q) | ¬p | ¬q | ¬p∨¬q. جميع القيم متطابقة.", en: "Use truth table. p q | p∧q | ¬(p∧q) | ¬p | ¬q | ¬p∨¬q. All values match." } },
+        { text: { ar: "أثبت أن (p → q) ≡ (¬p ∨ q) باستخدام جدول الصواب.", en: "Prove that (p → q) ≡ (¬p ∨ q) using truth table." }, modelAnswer: { ar: "p q | p→q | ¬p | ¬p∨q. القيم متطابقة في جميع الصفوف.", en: "p q | p→q | ¬p | ¬p∨q. Values match in all rows." } },
+        { text: { ar: "ما هو الفرق بين المعكوس (Converse) والعكس (Contrapositive) للعبارة p→q؟", en: "What is the difference between converse and contrapositive of p→q?" }, modelAnswer: { ar: "المعكوس هو q→p، أما العكس فهو ¬q→¬p. العكس مكافئ للعبارة الأصلية.", en: "Converse is q→p, contrapositive is ¬q→¬p. Contrapositive is equivalent to the original." } },
+        { text: { ar: "أثبت أن (p → q) ≡ (¬q → ¬p) (العكس مكافئ للعبارة الأصلية).", en: "Prove that (p → q) ≡ (¬q → ¬p) (contrapositive is equivalent)." }, modelAnswer: { ar: "p→q = ¬p∨q = ¬¬q∨¬p = ¬q→¬p.", en: "p→q = ¬p∨q = ¬¬q∨¬p = ¬q→¬p." } },
+        { text: { ar: "ما هو التناقض (Contradiction)؟ أعط مثالاً.", en: "What is a contradiction? Give an example." }, modelAnswer: { ar: "التناقض هو عبارة خاطئة دائماً. مثال: p ∧ ¬p.", en: "A contradiction is a statement that is always false. Example: p ∧ ¬p." } },
+        { text: { ar: "أثبت أن (p ∨ q) → r ≡ (p → r) ∧ (q → r).", en: "Prove that (p ∨ q) → r ≡ (p → r) ∧ (q → r)." }, modelAnswer: { ar: "(p∨q)→r = ¬(p∨q)∨r = (¬p∧¬q)∨r = (¬p∨r)∧(¬q∨r) = (p→r)∧(q→r).", en: "(p∨q)→r = ¬(p∨q)∨r = (¬p∧¬q)∨r = (¬p∨r)∧(¬q∨r) = (p→r)∧(q→r)." } },
+        { text: { ar: "ما هو الفرق بين العبارة الشرطية والثنائية الشرطية؟", en: "What is the difference between conditional and biconditional?" }, modelAnswer: { ar: "الشرطية p→q تعني 'إذا p فإن q'. الثنائية الشرطية p↔q تعني 'p إذا وفقط إذا q' (p→q و q→p).", en: "Conditional p→q means 'if p then q'. Biconditional p↔q means 'p if and only if q' (p→q and q→p)." } },
+        { text: { ar: "أثبت أن (p ↔ q) ≡ (p → q) ∧ (q → p).", en: "Prove that (p ↔ q) ≡ (p → q) ∧ (q → p)." }, modelAnswer: { ar: "من تعريف الثنائية الشرطية، p↔q صحيحة عندما p و q لهما نفس القيمة، وهذا يتحقق عندما p→q و q→p صحيحتان.", en: "By definition of biconditional, p↔q is true when p and q have same truth value, which happens when p→q and q→p are both true." } },
+        { text: { ar: "أوجد نفي العبارة: 'إذا أمطرت السماء فالأرض مبتلة'.", en: "Find the negation of: 'If it rains, then the ground is wet'." }, modelAnswer: { ar: "نفي p→q هو p ∧ ¬q. إذن: 'تمطر السماء والأرض ليست مبتلة'.", en: "Negation of p→q is p ∧ ¬q. So: 'It rains and the ground is not wet'." } }
+    ],
+    lec3: [
+        { text: { ar: "عرف المسند (Predicate) والمسورات العامة والوجودية.", en: "Define predicate and universal/existential quantifiers." }, modelAnswer: { ar: "المسند: جملة تحتوي على متغير. المسور العام (∀): يعني 'لكل'. المسور الوجودي (∃): يعني 'يوجد'.", en: "Predicate: sentence containing a variable. Universal quantifier (∀): 'for all'. Existential quantifier (∃): 'there exists'." } },
+        { text: { ar: "ما هو نفي العبارة ∀x (P(x) ∧ Q(x))؟", en: "What is the negation of ∀x (P(x) ∧ Q(x))?" }, modelAnswer: { ar: "∃x (¬P(x) ∨ ¬Q(x)).", en: "∃x (¬P(x) ∨ ¬Q(x))." } },
+        { text: { ar: "اكتب نفي العبارة: 'كل طالب في الفصل ناجح'.", en: "Write the negation of: 'Every student in the class is passing'." }, modelAnswer: { ar: "يوجد طالب في الفصل راسب.", en: "There exists a student in the class who is failing." } },
+        { text: { ar: "أثبت أن ¬∀x P(x) ≡ ∃x ¬P(x).", en: "Prove that ¬∀x P(x) ≡ ∃x ¬P(x)." }, modelAnswer: { ar: "إذا كان ¬∀x P(x) صحيحاً، فليس كل x يحقق P(x)، أي يوجد x لا يحقق P(x)، أي ∃x ¬P(x).", en: "If ¬∀x P(x) is true, then not all x satisfy P(x), so there exists x that does not satisfy P(x), i.e., ∃x ¬P(x)." } },
+        { text: { ar: "أكتب عبارة مسورة باستخدام المسور العام، ثم اكتب نفيها.", en: "Write a quantified statement using universal quantifier, then write its negation." }, modelAnswer: { ar: "العبارة: ∀x (x > 0 → x² > 0). نفيها: ∃x (x > 0 ∧ x² ≤ 0).", en: "Statement: ∀x (x > 0 → x² > 0). Negation: ∃x (x > 0 ∧ x² ≤ 0)." } },
+        { text: { ar: "ما الفرق بين 'يوجد' و 'لكل' في المنطق الرياضي؟", en: "What is the difference between 'exists' and 'for all' in mathematical logic?" }, modelAnswer: { ar: "'يوجد' (∃) تعني وجود عنصر واحد على الأقل يحقق الشرط. 'لكل' (∀) تعني أن جميع العناصر تحقق الشرط.", en: "'Exists' (∃) means at least one element satisfies the condition. 'For all' (∀) means every element satisfies the condition." } },
+        { text: { ar: "إذا كان مجال x هو الأعداد الصحيحة، فهل العبارة ∀x (x² ≥ 0) صحيحة؟", en: "If the domain of x is integers, is ∀x (x² ≥ 0) true?" }, modelAnswer: { ar: "نعم، لأن مربع أي عدد صحيح هو عدد غير سالب.", en: "Yes, because the square of any integer is non-negative." } },
+        { text: { ar: "أعط مثالاً على عبارة مسورة تكون خاطئة مع مجال الأعداد الطبيعية.", en: "Give an example of a quantified statement that is false over natural numbers." }, modelAnswer: { ar: "∃x (x + 5 = 2) خاطئة لأنه لا يوجد عدد طبيعي يحققها.", en: "∃x (x + 5 = 2) is false because no natural number satisfies it." } }
+    ]
+};
+// ==================== تتمة الأسئلة المقالية (المحاضرات 4-11) ====================
+essayBank.lec4 = [
+    { text: { ar: "عرف الدالة واذكر مكوناتها الأساسية.", en: "Define function and state its basic components." }, modelAnswer: { ar: "الدالة f: X→Y هي علاقة تربط كل عنصر في X بعنصر واحد فقط في Y. المكونات: المجال (Domain)، المجال المقابل (Codomain)، المدى (Range).", en: "A function f: X→Y associates each element in X with exactly one element in Y. Components: Domain, Codomain, Range." } },
+    { text: { ar: "ما الفرق بين الدالة واحد لواحد (Injective) والدالة الشاملة (Surjective)؟", en: "What is the difference between injective and surjective functions?" }, modelAnswer: { ar: "واحد لواحد: f(x₁)=f(x₂) ⇒ x₁=x₂. شاملة: كل y∈Y يوجد x∈X بحيث f(x)=y.", en: "Injective: f(x₁)=f(x₂) ⇒ x₁=x₂. Surjective: every y∈Y has x∈X with f(x)=y." } },
+    { text: { ar: "أثبت أن الدالة f(x)=2x+1 من R إلى R هي دالة تقابل (Bijective).", en: "Prove that f(x)=2x+1 from R to R is bijective." }, modelAnswer: { ar: "واحد لواحد: 2x₁+1=2x₂+1 ⇒ x₁=x₂. شاملة: لأي y، نضع x=(y-1)/2، f(x)=y. إذن تقابل.", en: "Injective: 2x₁+1=2x₂+1 ⇒ x₁=x₂. Surjective: for any y, take x=(y-1)/2, then f(x)=y. Hence bijective." } },
+    { text: { ar: "إذا كانت f(x)=x² من R إلى R، هل هي واحد لواحد؟ لماذا؟", en: "Is f(x)=x² from R to R injective? Why?" }, modelAnswer: { ar: "لا، لأن f(2)=4 و f(-2)=4، مع 2≠-2.", en: "No, because f(2)=4 and f(-2)=4, but 2≠-2." } },
+    { text: { ar: "أوجد مدى الدالة f(x)=x²+2 من R إلى R.", en: "Find the range of f(x)=x²+2 from R to R." }, modelAnswer: { ar: "المدى = [2, ∞) لأن x² ≥ 0 لكل x، إذن x²+2 ≥ 2.", en: "Range = [2, ∞) because x² ≥ 0 for all x, so x²+2 ≥ 2." } },
+    { text: { ar: "ما هو الفرق بين المجال والمجال المقابل والمدى؟", en: "What is the difference between domain, codomain, and range?" }, modelAnswer: { ar: "المجال: مجموعة المدخلات. المجال المقابل: مجموعة المخرجات الممكنة. المدى: مجموعة المخرجات الفعلية.", en: "Domain: set of inputs. Codomain: set of possible outputs. Range: set of actual outputs." } },
+    { text: { ar: "أعط مثالاً على دالة ليست واحد لواحد وليست شاملة.", en: "Give an example of a function that is neither injective nor surjective." }, modelAnswer: { ar: "f(x)=x² من R إلى R ليست واحد لواحد (f(2)=f(-2)) وليست شاملة لأن الأعداد السالبة ليس لها صورة.", en: "f(x)=x² from R to R is not injective (f(2)=f(-2)) and not surjective because negative numbers have no preimage." } },
+    { text: { ar: "إذا كانت f(x)=3x-2، فجد f(0), f(1), f(-1).", en: "If f(x)=3x-2, find f(0), f(1), f(-1)." }, modelAnswer: { ar: "f(0)=-2, f(1)=1, f(-1)=-5.", en: "f(0)=-2, f(1)=1, f(-1)=-5." } },
+    { text: { ar: "ما معنى أن تكون الدالة 'تقابل' (Bijective)؟", en: "What does it mean for a function to be bijective?" }, modelAnswer: { ar: "يعني أن الدالة واحد لواحد وشاملة، أي أن لكل عنصر في المجال المقابل صورة فريدة.", en: "It means the function is both injective and surjective, i.e., each element in the codomain has a unique preimage." } },
+    { text: { ar: "أوجد قيمة f(2) إذا كانت f(x)=x³-4x+1.", en: "Find f(2) if f(x)=x³-4x+1." }, modelAnswer: { ar: "f(2)=8-8+1=1.", en: "f(2)=8-8+1=1." } }
+];
+
+essayBank.lec5 = [
+    { text: { ar: "اشرح مبدأ الاستقراء الرياضي مع ذكر خطواته.", en: "Explain the principle of mathematical induction with its steps." }, modelAnswer: { ar: "1) إثبات P(1) صحيحة. 2) افتراض P(k) صحيحة. 3) إثبات P(k+1) صحيحة.", en: "1) Prove P(1) is true. 2) Assume P(k) is true. 3) Prove P(k+1) is true." } },
+    { text: { ar: "باستخدام الاستقراء الرياضي، أثبت أن 1+2+3+...+n = n(n+1)/2.", en: "Using mathematical induction, prove that 1+2+3+...+n = n(n+1)/2." }, modelAnswer: { ar: "الأساس n=1: 1=1×2/2. الفرضية: 1+...+k=k(k+1)/2. الخطوة: نضيف k+1 → k(k+1)/2+(k+1) = (k+1)(k+2)/2.", en: "Base n=1: 1=1×2/2. Hypothesis: 1+...+k=k(k+1)/2. Step: add k+1 → k(k+1)/2+(k+1) = (k+1)(k+2)/2." } },
+    { text: { ar: "أثبت أن 1²+2²+...+n² = n(n+1)(2n+1)/6 باستخدام الاستقراء.", en: "Prove that 1²+2²+...+n² = n(n+1)(2n+1)/6 using induction." }, modelAnswer: { ar: "الأساس n=1: 1=1×2×3/6=1. الفرضية: 1²+...+k²=k(k+1)(2k+1)/6. الخطوة: نضيف (k+1)² ونبسط.", en: "Base n=1: 1=1×2×3/6=1. Hypothesis: 1²+...+k²=k(k+1)(2k+1)/6. Step: add (k+1)² and simplify." } },
+    { text: { ar: "أثبت أن 1+3+5+...+(2n-1) = n² باستخدام الاستقراء.", en: "Prove that 1+3+5+...+(2n-1) = n² using induction." }, modelAnswer: { ar: "الأساس n=1: 1=1². الفرضية: 1+3+...+(2k-1)=k². الخطوة: نضيف 2(k+1)-1=2k+1 → k²+2k+1=(k+1)².", en: "Base n=1: 1=1². Hypothesis: 1+3+...+(2k-1)=k². Step: add 2(k+1)-1=2k+1 → k²+2k+1=(k+1)²." } },
+    { text: { ar: "أثبت أن 2ⁿ > n لكل n≥1 باستخدام الاستقراء.", en: "Prove that 2ⁿ > n for all n≥1 using induction." }, modelAnswer: { ar: "الأساس n=1: 2>1. الفرضية: 2ᵏ > k. الخطوة: 2ᵏ⁺¹ = 2×2ᵏ > 2k ≥ k+1 (لـ k≥1).", en: "Base n=1: 2>1. Hypothesis: 2ᵏ > k. Step: 2ᵏ⁺¹ = 2×2ᵏ > 2k ≥ k+1 (for k≥1)." } },
+    { text: { ar: "ما هي شروط استخدام الاستقراء الرياضي؟", en: "What are the conditions for using mathematical induction?" }, modelAnswer: { ar: "أن تكون العبارة P(n) معرفة للأعداد الطبيعية، وأن نتمكن من إثبات الأساس والخطوة.", en: "P(n) must be defined for natural numbers, and we must be able to prove base case and inductive step." } },
+    { text: { ar: "أثبت أن n² ≥ n لكل n∈N باستخدام الاستقراء.", en: "Prove that n² ≥ n for all n∈N using induction." }, modelAnswer: { ar: "الأساس n=1: 1≥1. الفرضية: k²≥k. الخطوة: (k+1)² = k²+2k+1 ≥ k+2k+1 = 3k+1 ≥ k+1.", en: "Base n=1: 1≥1. Hypothesis: k²≥k. Step: (k+1)² = k²+2k+1 ≥ k+2k+1 = 3k+1 ≥ k+1." } },
+    { text: { ar: "أثبت أن n³ - n يقبل القسمة على 3 لكل n∈N.", en: "Prove that n³ - n is divisible by 3 for all n∈N." }, modelAnswer: { ar: "الأساس n=1: 1-1=0. الفرضية: k³-k=3m. الخطوة: (k+1)³-(k+1) = k³+3k²+3k+1-k-1 = (k³-k)+3(k²+k).", en: "Base n=1: 1-1=0. Hypothesis: k³-k=3m. Step: (k+1)³-(k+1) = (k³-k)+3(k²+k)." } }
+];
+
+essayBank.lec6 = [
+    { text: { ar: "عرف المجموعة واذكر أنواعها.", en: "Define set and list its types." }, modelAnswer: { ar: "المجموعة هي مجموعة من العناصر المحددة. أنواعها: منتهية، غير منتهية، خالية، جزئية.", en: "A set is a collection of distinct objects. Types: finite, infinite, empty, subset." } },
+    { text: { ar: "ما هي مجموعة القوى (Power Set)؟ أعط مثالاً.", en: "What is the power set? Give an example." }, modelAnswer: { ar: "مجموعة جميع المجموعات الجزئية. مثال: A={a,b} → P(A)={∅,{a},{b},{a,b}}.", en: "The set of all subsets. Example: A={a,b} → P(A)={∅,{a},{b},{a,b}}." } },
+    { text: { ar: "أثبت أن ∅ ⊆ A لكل مجموعة A.", en: "Prove that ∅ ⊆ A for every set A." }, modelAnswer: { ar: "الشرط: إذا x∈∅ فإن x∈A. بما أنه لا يوجد x∈∅، فالشرط صحيح دائماً.", en: "Condition: if x∈∅ then x∈A. Since there is no x∈∅, the condition is always true." } },
+    { text: { ar: "ما هو ترتيب المجموعة (Cardinality)؟ وكيف نحسب ترتيب مجموعة القوى؟", en: "What is cardinality? How to calculate power set cardinality?" }, modelAnswer: { ar: "عدد عناصر المجموعة. |P(A)| = 2^{|A|}.", en: "The number of elements in a set. |P(A)| = 2^{|A|}." } },
+    { text: { ar: "إذا كان A = {1,2,3} و B = {2,3,4}، فأوجد A∪B و A∩B و A-B.", en: "If A = {1,2,3} and B = {2,3,4}, find A∪B, A∩B, A-B." }, modelAnswer: { ar: "A∪B={1,2,3,4}, A∩B={2,3}, A-B={1}.", en: "A∪B={1,2,3,4}, A∩B={2,3}, A-B={1}." } },
+    { text: { ar: "ما الفرق بين المجموعة الجزئية والمجموعة الجزئية الحقيقية؟", en: "What is the difference between subset and proper subset?" }, modelAnswer: { ar: "A⊆B تعني كل عنصر في A موجود في B. A⊂B تعني A⊆B و A≠B.", en: "A⊆B means every element of A is in B. A⊂B means A⊆B and A≠B." } }
+];
+
+essayBank.lec7 = [
+    { text: { ar: "اذكر قوانين دي مورجان للمجموعات مع شرحها.", en: "State De Morgan's laws for sets with explanation." }, modelAnswer: { ar: "(A∪B)' = A'∩B' و (A∩B)' = A'∪B'.", en: "(A∪B)' = A'∩B' and (A∩B)' = A'∪B'." } },
+    { text: { ar: "أثبت أن A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C) باستخدام عناصر المجموعات.", en: "Prove A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C) using set elements." }, modelAnswer: { ar: "إذا x∈A∪(B∩C) فإن x∈A أو x∈B∩C. الحالتان تؤديان إلى x∈(A∪B)∩(A∪C). والعكس صحيح.", en: "If x∈A∪(B∩C) then x∈A or x∈B∩C. Both cases lead to x∈(A∪B)∩(A∪C). The converse is also true." } },
+    { text: { ar: "ما هو الفرق المتناظر (Symmetric Difference)؟ أعط مثالاً.", en: "What is symmetric difference? Give an example." }, modelAnswer: { ar: "AΔB = (A-B)∪(B-A). مثال: A={1,2,3}, B={3,4,5} → AΔB={1,2,4,5}.", en: "AΔB = (A-B)∪(B-A). Example: A={1,2,3}, B={3,4,5} → AΔB={1,2,4,5}." } },
+    { text: { ar: "أثبت أن A - B = A ∩ B'.", en: "Prove that A - B = A ∩ B'." }, modelAnswer: { ar: "x∈A-B ⇔ x∈A و x∉B ⇔ x∈A و x∈B' ⇔ x∈A∩B'.", en: "x∈A-B ⇔ x∈A and x∉B ⇔ x∈A and x∈B' ⇔ x∈A∩B'." } },
+    { text: { ar: "إذا كان U={1,2,3,4,5,6}, A={1,2,3}, B={3,4,5}، فأوجد A', B', (A∩B)'.", en: "If U={1,2,3,4,5,6}, A={1,2,3}, B={3,4,5}, find A', B', (A∩B)'." }, modelAnswer: { ar: "A'={4,5,6}, B'={1,2,6}, (A∩B)'={1,2,4,5,6}.", en: "A'={4,5,6}, B'={1,2,6}, (A∩B)'={1,2,4,5,6}." } }
+];
+
+essayBank.lec9 = [
+    { text: { ar: "عرف العلاقة الثنائية واذكر خصائصها.", en: "Define binary relation and its properties." }, modelAnswer: { ar: "العلاقة R من A إلى B هي مجموعة جزئية من A×B. خصائصها: انعكاسية، تناظرية، متعدية.", en: "A binary relation R from A to B is a subset of A×B. Properties: reflexive, symmetric, transitive." } },
+    { text: { ar: "ما هي علاقة التكافؤ؟ أعط مثالاً.", en: "What is an equivalence relation? Give an example." }, modelAnswer: { ar: "علاقة انعكاسية، تناظرية، ومتعدية. مثال: علاقة '='.", en: "A relation that is reflexive, symmetric, and transitive. Example: equality '='." } },
+    { text: { ar: "أثبت أن علاقة '=' على مجموعة الأعداد الحقيقية هي علاقة تكافؤ.", en: "Prove that equality '=' on real numbers is an equivalence relation." }, modelAnswer: { ar: "انعكاسية: a=a. تناظرية: a=b ⇒ b=a. متعدية: a=b و b=c ⇒ a=c.", en: "Reflexive: a=a. Symmetric: a=b ⇒ b=a. Transitive: a=b and b=c ⇒ a=c." } },
+    { text: { ar: "هل العلاقة '≤' على الأعداد الحقيقية هي علاقة تكافؤ؟ لماذا؟", en: "Is '≤' on real numbers an equivalence relation? Why?" }, modelAnswer: { ar: "لا، لأنها ليست تناظرية: a≤b لا تعني b≤a.", en: "No, because it is not symmetric: a≤b does not imply b≤a." } },
+    { text: { ar: "عرف العلاقة المتعدية (Transitive) مع مثال.", en: "Define transitive relation with an example." }, modelAnswer: { ar: "إذا (a,b)∈R و (b,c)∈R فإن (a,c)∈R. مثال: علاقة '<'.", en: "If (a,b)∈R and (b,c)∈R then (a,c)∈R. Example: '<'." } }
+];
+
+essayBank.lec11 = [
+    { text: { ar: "عرف تركيب الدوال (Function Composition) مع مثال.", en: "Define function composition with an example." }, modelAnswer: { ar: "(f∘g)(x) = f(g(x)). مثال: f(x)=x², g(x)=x+1 → (f∘g)(x)=(x+1)².", en: "(f∘g)(x) = f(g(x)). Example: f(x)=x², g(x)=x+1 → (f∘g)(x)=(x+1)²." } },
+    { text: { ar: "أثبت أن (f∘g)∘h = f∘(g∘h) (عملية التركيب تجميعية).", en: "Prove that (f∘g)∘h = f∘(g∘h) (composition is associative)." }, modelAnswer: { ar: "((f∘g)∘h)(x) = (f∘g)(h(x)) = f(g(h(x))) = f((g∘h)(x)) = (f∘(g∘h))(x).", en: "((f∘g)∘h)(x) = (f∘g)(h(x)) = f(g(h(x))) = f((g∘h)(x)) = (f∘(g∘h))(x)." } },
+    { text: { ar: "كيف تجد معكوس الدالة؟ أعط مثالاً.", en: "How to find the inverse of a function? Give an example." }, modelAnswer: { ar: "ضع y=f(x)، حل المعادلة لإيجاد x بدلالة y، ثم بدل x و y. مثال: f(x)=2x-3 → f⁻¹(x)=(x+3)/2.", en: "Set y=f(x), solve for x in terms of y, then swap x and y. Example: f(x)=2x-3 → f⁻¹(x)=(x+3)/2." } },
+    { text: { ar: "ما هو شرط وجود معكوس الدالة؟", en: "What is the condition for a function to have an inverse?" }, modelAnswer: { ar: "أن تكون الدالة تقابل (Bijective): واحد لواحد وشاملة.", en: "The function must be bijective: injective and surjective." } },
+    { text: { ar: "إذا كان f(x)=x+2 و g(x)=3x، فجد f∘g و g∘f.", en: "If f(x)=x+2 and g(x)=3x, find f∘g and g∘f." }, modelAnswer: { ar: "f∘g(x)=3x+2, g∘f(x)=3x+6.", en: "f∘g(x)=3x+2, g∘f(x)=3x+6." } }
+];
+
+// دمج جميع الأسئلة المقالية للامتحان الشامل
+essayBank.all = [
+    ...essayBank.lec1, ...essayBank.lec2, ...essayBank.lec3,
+    ...essayBank.lec4, ...essayBank.lec5, ...essayBank.lec6,
+    ...essayBank.lec7, ...essayBank.lec9, ...essayBank.lec11
+];
+
+// ==================== دوال مساعدة ====================
+function getRandomQuestions(arr, count) {
+    let shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, count);
+}
+
+// ==================== الصفحة الرئيسية ====================
+function renderHome() {
+    return `
+        <div class="card">
+            <h2>📚 ${currentLang === "ar" ? "رياضيات متقطعة (Discrete Mathematics)" : "Discrete Mathematics"}</h2>
+            <p>${currentLang === "ar" ? "مرحباً بك في بوابة الرياضيات المتقطعة. الموقع يحتوي على ملخصات شاملة لكل محاضرة، وامتحانات تفاعلية تضم أكثر من 500 سؤال." : "Welcome to the Discrete Mathematics portal. The site contains comprehensive summaries and interactive exams with over 500 questions."}</p>
+            <ul style="margin-top: 15px; margin-right: 25px;">
+                <li><strong>📖 ${currentLang === "ar" ? "الملخصات" : "Summaries"}</strong> - ${currentLang === "ar" ? "ملخصات حقيقية من محاضراتك" : "Real summaries from your lectures"}</li>
+                <li><strong>📝 ${currentLang === "ar" ? "الامتحانات" : "Exams"}</strong> - ${currentLang === "ar" ? "اختيار من متعدد (15 سؤال) أو مقالي (10 أسئلة)" : "Multiple Choice (15 questions) or Essay (10 questions)"}</li>
+            </ul>
+        </div>
+        <div class="contact-card">
+            <h3><i class="fas fa-headset"></i> ${currentLang === "ar" ? "تواصل مع المطور" : "Contact Developer"}</h3>
+            <div class="social-icons">
+                <a href="https://wa.me/249902912702" target="_blank" style="color:#25D366;"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://t.me/ABU_OMAER" target="_blank" style="color:#26A5E4;"><i class="fab fa-telegram"></i></a>
+                <a href="https://www.facebook.com/share/1Cj7YtRDmQ/" target="_blank" style="color:#1877F2;"><i class="fab fa-facebook"></i></a>
+            </div>
+            <p>cipher ⁷³ | ust</p>
+        </div>
+    `;
+}
+
+// ==================== عرض الملخصات ====================
+function renderSummary() {
+    if (currentLecture === "all") {
+        let html = `<div class="card"><h2>📖 ${currentLang === "ar" ? "جميع الملخصات" : "All Summaries"}</h2>`;
+        const lectures = [
+            { key: "lec1", name: { ar: "محاضرة 1: منطق العبارات", en: "Lecture 1: Logic" } },
+            { key: "lec2", name: { ar: "محاضرة 2: التكافؤ المنطقي", en: "Lecture 2: Logical Equivalence" } },
+            { key: "lec3", name: { ar: "محاضرة 3: المسندات والمُكممات", en: "Lecture 3: Predicates & Quantifiers" } },
+            { key: "lec4", name: { ar: "محاضرة 4: الدوال", en: "Lecture 4: Functions" } },
+            { key: "lec5", name: { ar: "محاضرة 5: الاستقراء الرياضي", en: "Lecture 5: Induction" } },
+            { key: "lec6", name: { ar: "محاضرة 6: نظرية المجموعات", en: "Lecture 6: Set Theory" } },
+            { key: "lec7", name: { ar: "محاضرة 7: عمليات المجموعات", en: "Lecture 7: Set Operations" } },
+            { key: "lec9", name: { ar: "محاضرة 9: العلاقات", en: "Lecture 9: Relations" } },
+            { key: "lec11", name: { ar: "محاضرة 11: تركيب الدوال", en: "Lecture 11: Composition" } }
+        ];
+        for (const lec of lectures) {
+            html += `<div class="summary-box"><h3>${lec.name[currentLang]}</h3><p>${summariesData[lec.key][currentLang]}</p></div>`;
+        }
+        html += `</div>`;
+        return html;
+    } else {
+        return `<div class="card"><h2>📖 ${currentLang === "ar" ? "ملخص" : "Summary"}</h2><div class="summary-box"><p>${summariesData[currentLecture][currentLang]}</p></div></div>`;
+    }
+}
+// ==================== عرض الامتحان ====================
+function renderExam() {
+    const mcqCount = 15;
+    const essayCount = 10;
+    
+    if (currentLecture === "all") {
+        currentMcqQuestions = getRandomQuestions(mcqBank.all, mcqCount);
+        currentEssayQuestions = getRandomQuestions(essayBank.all, essayCount);
+    } else {
+        currentMcqQuestions = getRandomQuestions(mcqBank[currentLecture] || mcqBank.lec1, mcqCount);
+        currentEssayQuestions = getRandomQuestions(essayBank[currentLecture] || essayBank.lec1, essayCount);
+    }
+    
+    const lectureName = currentLecture === "all" ? 
+        (currentLang === "ar" ? "امتحان شامل (جميع المحاضرات)" : "Comprehensive Exam (All Lectures)") : 
+        (currentLang === "ar" ? `امتحان ${document.querySelector(`#lectureSelect option[value="${currentLecture}"]`)?.text || ""}` : `Exam: ${document.querySelector(`#lectureSelect option[value="${currentLecture}"]`)?.text || ""}`);
+    
+    let html = `
+        <div class="card">
+            <h2>📝 ${lectureName}</h2>
+            <div class="exam-type-group">
+                <button class="exam-type-btn ${currentExamType === 'mcq' ? 'active' : ''}" onclick="setExamType('mcq')">✅ ${currentLang === "ar" ? "اختيار من متعدد (15 سؤال)" : "Multiple Choice (15 questions)"}</button>
+                <button class="exam-type-btn ${currentExamType === 'essay' ? 'active' : ''}" onclick="setExamType('essay')">✍️ ${currentLang === "ar" ? "أسئلة مقالية (10 أسئلة)" : "Essay Questions (10 questions)"}</button>
+            </div>
+            <button class="refresh-btn" onclick="refreshExam()">🔄 ${currentLang === "ar" ? "أسئلة جديدة" : "New Questions"}</button>
+            <button class="submit-btn" onclick="submitExam()">📊 ${currentLang === "ar" ? "إنهاء الامتحان وعرض النتيجة" : "Submit Exam & Show Result"}</button>
+            <div id="questionsArea"></div>
+            <div id="resultArea"></div>
+        </div>
+    `;
+    
+    document.getElementById('main-container').innerHTML = html;
+    
+    const questionsArea = document.getElementById('questionsArea');
+    if (currentExamType === "mcq") {
+        let qHtml = `<h3 style="margin: 20px 0;">📖 ${currentLang === "ar" ? "أجب عن الأسئلة التالية:" : "Answer the following questions:"}</h3>`;
+        currentMcqQuestions.forEach((q, idx) => {
+            const qText = q.text[currentLang];
+            const qOptions = q.options[currentLang];
+            qHtml += `
+                <div class="question-block">
+                    <div class="question-text">${idx+1}. ${qText}</div>
+                    <div class="options">
+            `;
+            qOptions.forEach(opt => {
+                qHtml += `<label class="option-label"><input type="radio" name="q${idx}" value="${opt}"> ${opt}</label>`;
+            });
+            qHtml += `</div></div>`;
+        });
+        questionsArea.innerHTML = qHtml;
+    } else {
+        let qHtml = `<h3 style="margin: 20px 0;">✍️ ${currentLang === "ar" ? "أجب عن الأسئلة المقالية التالية:" : "Answer the following essay questions:"}</h3>`;
+        currentEssayQuestions.forEach((q, idx) => {
+            const qText = q.text[currentLang];
+            qHtml += `
+                <div class="question-block">
+                    <div class="question-text">${idx+1}. ${qText}</div>
+                    <textarea id="essay_${idx}" rows="6" placeholder="${currentLang === "ar" ? "اكتب إجابتك هنا..." : "Write your answer here..."}"></textarea>
+                </div>
+            `;
+        });
+        questionsArea.innerHTML = qHtml;
+    }
+}
+
+// ==================== دوال تصحيح الامتحان ====================
+function submitExam() {
+    if (currentExamType === "mcq") {
+        submitMcqExam();
+    } else {
+        submitEssayExam();
+    }
+}
+
+function submitMcqExam() {
+    let correctCount = 0;
+    let wrongList = [];
+    
+    for (let i = 0; i < currentMcqQuestions.length; i++) {
+        let selected = document.querySelector(`input[name="q${i}"]:checked`);
+        let userAnswer = selected ? selected.value : "";
+        let correctAnswer = currentMcqQuestions[i].correct[currentLang];
+        
+        if (userAnswer === correctAnswer) {
+            correctCount++;
+        } else {
+            wrongList.push({
+                question: currentMcqQuestions[i].text[currentLang],
+                correct: correctAnswer,
+                user: userAnswer || (currentLang === "ar" ? "لم يتم الاختيار" : "No answer selected")
+            });
+        }
+    }
+    
+    let percentage = (correctCount / currentMcqQuestions.length) * 100;
+    let resultHTML = `<div class="result-box">
+        <h3>${currentLang === "ar" ? "نتيجتك:" : "Your Score:"} ${correctCount} / ${currentMcqQuestions.length}</h3>
+        <h2>${percentage.toFixed(1)}%</h2>`;
+    
+    if (wrongList.length > 0) {
+        resultHTML += `<hr><h4>❌ ${currentLang === "ar" ? "الأخطاء والتصحيح:" : "Mistakes & Corrections:"}</h4>`;
+        wrongList.forEach(w => {
+            resultHTML += `<div class="mistake-item">
+                <strong>📌 ${w.question}</strong><br>
+                ✅ ${currentLang === "ar" ? "الإجابة الصحيحة:" : "Correct answer:"} ${w.correct}<br>
+                ❌ ${currentLang === "ar" ? "إجابتك:" : "Your answer:"} ${w.user}
+            </div>`;
+        });
+    } else {
+        resultHTML += `<h4>🎉 ${currentLang === "ar" ? "ممتاز! جميع الإجابات صحيحة" : "Perfect! All answers are correct"} 🎉</h4>`;
+    }
+    
+    resultHTML += `</div>`;
+    document.getElementById('resultArea').innerHTML = resultHTML;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+function submitEssayExam() {
+    let comparisons = [];
+    
+    for (let i = 0; i < currentEssayQuestions.length; i++) {
+        let userAnswer = document.getElementById(`essay_${i}`)?.value || "";
+        let modelAnswer = currentEssayQuestions[i].modelAnswer[currentLang];
+        
+        comparisons.push({
+            question: currentEssayQuestions[i].text[currentLang],
+            userAnswer: userAnswer || (currentLang === "ar" ? "لم تتم كتابة إجابة" : "No answer written"),
+            modelAnswer: modelAnswer
+        });
+    }
+    
+    let resultHTML = `<div class="result-box">
+        <h3>📝 ${currentLang === "ar" ? "مقارنة الإجابات المقالية" : "Essay Answers Comparison"}</h3>
+        <p>${currentLang === "ar" ? "قارن إجابتك مع الحل النموذجي لكل سؤال:" : "Compare your answer with the model answer for each question:"}</p>`;
+    
+    comparisons.forEach((c, idx) => {
+        resultHTML += `<div class="essay-compare">
+            <strong>📌 ${idx+1}. ${c.question}</strong>
+            <div class="user-ans"><strong>✍️ ${currentLang === "ar" ? "إجابتك:" : "Your answer:"}</strong><br>${c.userAnswer}</div>
+            <div class="correct-ans"><strong>✅ ${currentLang === "ar" ? "الحل النموذجي:" : "Model answer:"}</strong><br>${c.modelAnswer}</div>
+            <hr>
+        </div>`;
+    });
+    
+    resultHTML += `<br><p>${currentLang === "ar" ? "💡 ملاحظة: قارن إجابتك مع الحل النموذجي لتتعلم الأخطاء وتحسن إجاباتك." : "💡 Note: Compare your answer with the model answer to learn from mistakes and improve."}</p>`;
+    resultHTML += `</div>`;
+    
+    document.getElementById('resultArea').innerHTML = resultHTML;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+// ==================== دوال التحكم ====================
+function setExamType(type) {
+    currentExamType = type;
+    renderExam();
+}
+
+function refreshExam() {
+    renderExam();
+}
+
+function setCurrentPage(page) {
+    currentPage = page;
+    const container = document.getElementById('main-container');
+    
+    if (page === 'home') {
+        container.innerHTML = renderHome();
+    } else if (page === 'summary') {
+        container.innerHTML = renderSummary();
+    } else if (page === 'exam') {
+        renderExam();
+    }
+    
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.dataset.page === page) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
+
+// ==================== أحداث المستمع ====================
+document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        currentLang = btn.dataset.lang;
+        updateLanguage();
+    });
+});
+
+document.getElementById('lectureSelect').addEventListener('change', (e) => {
+    currentLecture = e.target.value;
+    if (currentPage === 'summary') {
+        setCurrentPage('summary');
+    } else if (currentPage === 'exam') {
+        renderExam();
+    }
+});
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        setCurrentPage(btn.dataset.page);
+    });
+});
+// ==================== التشغيل الأولي ====================
+// تهيئة الصفحة الرئيسية
+setCurrentPage('home');
+
+// التأكد من تحميل اللغة بشكل صحيح
+setTimeout(() => {
+    updateLanguage();
+}, 100);
+</script>
+</body>
+</html>
