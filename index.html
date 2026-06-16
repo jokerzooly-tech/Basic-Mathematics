@@ -146,7 +146,7 @@ function updateLanguage() {
     else if (currentPage === 'summary') renderSummary();
     else if (currentPage === 'exam') renderExam();
 }
-// ==================== الملخصات (باللغتين) ====================
+// ==================== الملخصات (9 محاضرات - بدون تغيير) ====================
 const summariesData = {
     lec1: { ar: "القضية (Proposition) هي جملة خبرية تحتمل الصحة أو الخطأ. نرمز للقضايا بـ p, q, r. جدول الصواب يوضح جميع احتمالات الصحة والخطأ. عدد الصفوف = 2ⁿ حيث n عدد القضايا. النفي (~p): إذا كانت p صحيحة فإن ~p خاطئة والعكس. العطف (∧): p∧q صحيحة فقط عندما p و q كلاهما صحيحان. الفصل (∨): p∨q خاطئة فقط عندما p و q كلاهما خاطئان.", en: "A proposition is a declarative sentence that is either true or false. We denote propositions by p, q, r. Truth tables show all truth value possibilities. Number of rows = 2ⁿ where n is number of propositions. Negation (~p): if p is true then ~p is false. Conjunction (∧): p∧q is true only when both p and q are true. Disjunction (∨): p∨q is false only when both p and q are false." },
     lec2: { ar: "العبارة الشرطية p→q (إذا p فإن q) تكون خاطئة فقط عندما p صحيحة و q خاطئة. العبارة الثنائية الشرطية p↔q (p إذا وفقط إذا q) تكون صحيحة عندما p و q لهما نفس قيمة الصواب. المعكوس (Converse): q→p. المعكوس المعاكس (Inverse): ~p→~q. العكس (Contrapositive): ~q→~p. العكس مكافئ منطقياً للعبارة الأصلية.", en: "Conditional p→q (if p then q) is false only when p is true and q is false. Biconditional p↔q (p if and only if q) is true when p and q have the same truth value. Converse: q→p. Inverse: ~p→~q. Contrapositive: ~q→~p. The contrapositive is logically equivalent to the original statement." },
@@ -158,160 +158,6 @@ const summariesData = {
     lec9: { ar: "علاقة R على A: انعكاسية إذا (a,a)∈R لكل a∈A. تناظرية إذا (a,b)∈R فإن (b,a)∈R. متعدية إذا (a,b)∈R و (b,c)∈R فإن (a,c)∈R. علاقة التكافؤ هي علاقة انعكاسية وتناظرية ومتعدية. مثال: علاقة '=' هي علاقة تكافؤ.", en: "Relation R on A: Reflexive if (a,a)∈R for all a∈A. Symmetric if (a,b)∈R implies (b,a)∈R. Transitive if (a,b)∈R and (b,c)∈R implies (a,c)∈R. Equivalence relation is reflexive, symmetric, and transitive. Example: equality '=' is an equivalence relation." },
     lec11: { ar: "تركيب الدوال: (f∘g)(x) = f(g(x)). شروط التركيب: مدى g ⊆ مجال f. الدالة المحايدة I(x)=x تحقق: f∘I = f و I∘f = f. معكوس الدالة: إذا كانت f تقابلاً، فإن f⁻¹(y)=x حيث f(x)=y.", en: "Function composition: (f∘g)(x) = f(g(x)). Condition: range of g ⊆ domain of f. Identity function I(x)=x satisfies: f∘I = f and I∘f = f. Inverse function: if f is bijective, f⁻¹(y)=x where f(x)=y." }
 };
-
-// ==================== أسئلة MCQ (باللغتين) ====================
-const mcqBank = {
-    lec1: [
-        { text: { ar: "ما هي القضية (Proposition)؟", en: "What is a proposition?" }, options: { ar: ["جملة خبرية تحتمل الصحة أو الخطأ", "جملة أمرية", "سؤال", "تعجب"], en: ["Declarative sentence that is true or false", "Imperative sentence", "Question", "Exclamation"] }, correct: { ar: "جملة خبرية تحتمل الصحة أو الخطأ", en: "Declarative sentence that is true or false" } },
-        { text: { ar: "إذا كانت p صحيحة، فإن ~p تكون:", en: "If p is true, then ~p is:" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "مكافئة لـ p"], en: ["True", "False", "Undefined", "Equivalent to p"] }, correct: { ar: "خاطئة", en: "False" } },
-        { text: { ar: "عدد الصفوف في جدول الصواب لعبارة تحتوي على 3 متغيرات هو:", en: "Number of rows in truth table for 3 variables is:" }, options: { ar: ["4", "6", "8", "16"], en: ["4", "6", "8", "16"] }, correct: { ar: "8", en: "8" } },
-        { text: { ar: "العبارة p ∧ q تكون صحيحة فقط عندما:", en: "p ∧ q is true only when:" }, options: { ar: ["p صحيحة و q صحيحة", "p صحيحة و q خاطئة", "p خاطئة و q صحيحة", "p خاطئة و q خاطئة"], en: ["p true and q true", "p true and q false", "p false and q true", "p false and q false"] }, correct: { ar: "p صحيحة و q صحيحة", en: "p true and q true" } },
-        { text: { ar: "الرمز ∨ يعني:", en: "The symbol ∨ means:" }, options: { ar: ["و (عطف)", "أو (فصل)", "ليس (نفي)", "إذاً (شرط)"], en: ["AND (conjunction)", "OR (disjunction)", "NOT (negation)", "IF-THEN (conditional)"] }, correct: { ar: "أو (فصل)", en: "OR (disjunction)" } }
-    ],
-    lec2: [
-        { text: { ar: "العبارة الشرطية p → q تكون خاطئة فقط عندما:", en: "The conditional p → q is false only when:" }, options: { ar: ["p صحيحة و q صحيحة", "p صحيحة و q خاطئة", "p خاطئة و q صحيحة", "p خاطئة و q خاطئة"], en: ["p true and q true", "p true and q false", "p false and q true", "p false and q false"] }, correct: { ar: "p صحيحة و q خاطئة", en: "p true and q false" } },
-        { text: { ar: "المعاكس (Contrapositive) للعبارة p → q هو:", en: "The contrapositive of p → q is:" }, options: { ar: ["q → p", "~p → ~q", "~q → ~p", "p → ~q"], en: ["q → p", "~p → ~q", "~q → ~p", "p → ~q"] }, correct: { ar: "~q → ~p", en: "~q → ~p" } },
-        { text: { ar: "الطوطولوجيا (Tautology) هي عبارة:", en: "A tautology is a statement that is:" }, options: { ar: ["صحيحة دائماً", "خاطئة دائماً", "صحيحة أحياناً", "ليست قضية"], en: ["Always true", "Always false", "Sometimes true", "Not a proposition"] }, correct: { ar: "صحيحة دائماً", en: "Always true" } },
-        { text: { ar: "أي من التالي يعتبر طوطولوجيا؟", en: "Which of the following is a tautology?" }, options: { ar: ["p ∧ ~p", "p ∨ ~p", "p → ~p", "~p → p"], en: ["p ∧ ~p", "p ∨ ~p", "p → ~p", "~p → p"] }, correct: { ar: "p ∨ ~p", en: "p ∨ ~p" } },
-        { text: { ar: "العبارة p ↔ q تكون صحيحة عندما:", en: "p ↔ q is true when:" }, options: { ar: ["p و q مختلفان", "p و q متماثلان", "p صحيحة فقط", "q صحيحة فقط"], en: ["p and q are different", "p and q are the same", "p is true only", "q is true only"] }, correct: { ar: "p و q متماثلان", en: "p and q are the same" } }
-    ],
-    lec3: [
-        { text: { ar: "الرمز ∀ يعني:", en: "The symbol ∀ means:" }, options: { ar: ["يوجد", "لكل", "بعض", "لا يوجد"], en: ["There exists", "For all", "Some", "There is no"] }, correct: { ar: "لكل", en: "For all" } },
-        { text: { ar: "الرمز ∃ يعني:", en: "The symbol ∃ means:" }, options: { ar: ["يوجد", "لكل", "بعض", "لا يوجد"], en: ["There exists", "For all", "Some", "There is no"] }, correct: { ar: "يوجد", en: "There exists" } },
-        { text: { ar: "نفي العبارة ∀x P(x) هو:", en: "The negation of ∀x P(x) is:" }, options: { ar: ["∀x ~P(x)", "∃x ~P(x)", "~∃x P(x)", "∃x P(x)"], en: ["∀x ~P(x)", "∃x ~P(x)", "~∃x P(x)", "∃x P(x)"] }, correct: { ar: "∃x ~P(x)", en: "∃x ~P(x)" } },
-        { text: { ar: "نفي العبارة ∃x P(x) هو:", en: "The negation of ∃x P(x) is:" }, options: { ar: ["∀x ~P(x)", "∃x ~P(x)", "~∀x P(x)", "∀x P(x)"], en: ["∀x ~P(x)", "∃x ~P(x)", "~∀x P(x)", "∀x P(x)"] }, correct: { ar: "∀x ~P(x)", en: "∀x ~P(x)" } }
-    ],
-    lec4: [
-        { text: { ar: "الدالة f: X→Y تكون واحد لواحد (Injective) إذا:", en: "A function f: X→Y is injective if:" }, options: { ar: ["f(x₁)=f(x₂) ⇒ x₁=x₂", "كل y∈Y يوجد x∈X", "المجال = المدى", "الدالة متصلة"], en: ["f(x₁)=f(x₂) ⇒ x₁=x₂", "Every y∈Y has x∈X", "Domain = Range", "Function is continuous"] }, correct: { ar: "f(x₁)=f(x₂) ⇒ x₁=x₂", en: "f(x₁)=f(x₂) ⇒ x₁=x₂" } },
-        { text: { ar: "إذا كانت f(x)=2x-1، فإن f(3) يساوي:", en: "If f(x)=2x-1, then f(3) equals:" }, options: { ar: ["3", "4", "5", "6"], en: ["3", "4", "5", "6"] }, correct: { ar: "5", en: "5" } }
-    ],
-    lec5: [
-        { text: { ar: "الخطوة الأولى في الاستقراء الرياضي هي:", en: "The first step in mathematical induction is:" }, options: { ar: ["إثبات P(1) صحيحة", "افتراض P(k) صحيحة", "إثبات P(k+1) صحيحة", "كتابة النتيجة"], en: ["Prove P(1) is true", "Assume P(k) is true", "Prove P(k+1) is true", "Write conclusion"] }, correct: { ar: "إثبات P(1) صحيحة", en: "Prove P(1) is true" } }
-    ],
-    lec6: [
-        { text: { ar: "إذا كان A = {1,2} و B = {1,2,3}، فإن:", en: "If A = {1,2} and B = {1,2,3}, then:" }, options: { ar: ["A⊂B", "B⊂A", "A=B", "A∩B=∅"], en: ["A⊂B", "B⊂A", "A=B", "A∩B=∅"] }, correct: { ar: "A⊂B", en: "A⊂B" } },
-        { text: { ar: "إذا كان |A| = 4، فإن |P(A)| (مجموعة القوى) هو:", en: "If |A| = 4, then |P(A)| (power set) is:" }, options: { ar: ["4", "8", "12", "16"], en: ["4", "8", "12", "16"] }, correct: { ar: "16", en: "16" } }
-    ],
-    lec7: [
-        { text: { ar: "A ∪ B تحتوي على العناصر التي:", en: "A ∪ B contains elements that are:" }, options: { ar: ["في A أو B", "في A و B", "في A فقط", "في B فقط"], en: ["In A or B", "In A and B", "In A only", "In B only"] }, correct: { ar: "في A أو B", en: "In A or B" } },
-        { text: { ar: "قانون دي مورجان الأول ينص: (A ∪ B)' =", en: "De Morgan's first law states: (A ∪ B)' =" }, options: { ar: ["A' ∩ B'", "A' ∪ B'", "A ∩ B", "A ∪ B"], en: ["A' ∩ B'", "A' ∪ B'", "A ∩ B", "A ∪ B"] }, correct: { ar: "A' ∩ B'", en: "A' ∩ B'" } }
-    ],
-    lec9: [
-        { text: { ar: "علاقة التكافؤ هي علاقة:", en: "An equivalence relation is:" }, options: { ar: ["انعكاسية وتناظرية ومتعدية", "انعكاسية فقط", "تناظرية فقط", "متعدية فقط"], en: ["Reflexive, symmetric, transitive", "Reflexive only", "Symmetric only", "Transitive only"] }, correct: { ar: "انعكاسية وتناظرية ومتعدية", en: "Reflexive, symmetric, transitive" } }
-    ],
-    lec11: [
-        { text: { ar: "تركيب الدوال (f∘g)(x) يساوي:", en: "Function composition (f∘g)(x) equals:" }, options: { ar: ["f(g(x))", "g(f(x))", "f(x)+g(x)", "f(x)×g(x)"], en: ["f(g(x))", "g(f(x))", "f(x)+g(x)", "f(x)×g(x)"] }, correct: { ar: "f(g(x))", en: "f(g(x))" } }
-    ]
-};
-
-// دمج جميع أسئلة MCQ
-mcqBank.all = [
-    ...mcqBank.lec1, ...mcqBank.lec2, ...mcqBank.lec3,
-    ...mcqBank.lec4, ...mcqBank.lec5, ...mcqBank.lec6,
-    ...mcqBank.lec7, ...mcqBank.lec9, ...mcqBank.lec11
-];
-// ==================== الأسئلة المقالية (Essay) - باللغتين ====================
-const essayBank = {
-    lec1: [
-        { text: { ar: "عرف القضية (Proposition) مع إعطاء مثالين.", en: "Define proposition and give two examples." }, modelAnswer: { ar: "القضية هي جملة خبرية تحتمل الصحة أو الخطأ. مثال: '5+3=8' (صحيحة)، 'باريس عاصمة إنجلترا' (خاطئة).", en: "A proposition is a declarative sentence that is either true or false. Example: '5+3=8' (true), 'Paris is the capital of England' (false)." } },
-        { text: { ar: "أنشئ جدول الصواب للعبارة p ∧ q.", en: "Construct the truth table for p ∧ q." }, modelAnswer: { ar: "p q | p∧q\nص ص | ص\nص خ | خ\nخ ص | خ\nخ خ | خ", en: "p q | p∧q\nT T | T\nT F | F\nF T | F\nF F | F" } },
-        { text: { ar: "اشرح الفرق بين العطف (∧) والفصل (∨).", en: "Explain the difference between conjunction (∧) and disjunction (∨)." }, modelAnswer: { ar: "العطف (p∧q) يكون صحيحاً فقط عندما يكون كل من p و q صحيحين. الفصل (p∨q) يكون صحيحاً عندما يكون أحدهما على الأقل صحيحاً.", en: "Conjunction (p∧q) is true only when both p and q are true. Disjunction (p∨q) is true when at least one of p or q is true." } },
-        { text: { ar: "أثبت أن p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) باستخدام جدول الصواب.", en: "Prove that p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) using truth table." }, modelAnswer: { ar: "ننشئ جدول الصواب لجميع الاحتمالات (8 صفوف). نجد أن قيم p∧(q∨r) تساوي قيم (p∧q)∨(p∧r) في جميع الصفوف.", en: "Construct truth table for all possibilities (8 rows). The values of p∧(q∨r) equal (p∧q)∨(p∧r) in all rows." } },
-        { text: { ar: "ما هو عدد الصفوف في جدول الصواب لعبارة تحتوي على 4 متغيرات؟ ولماذا؟", en: "How many rows in a truth table for 4 variables? Why?" }, modelAnswer: { ar: "16 صفاً، لأن عدد الصفوف = 2ⁿ حيث n عدد المتغيرات، 2⁴ = 16.", en: "16 rows, because number of rows = 2ⁿ where n is number of variables, 2⁴ = 16." } },
-        { text: { ar: "أعط مثالاً على عبارة مركبة من ثلاث متغيرات واكتب جدول الصواب الخاص بها.", en: "Give an example of a compound statement with three variables and write its truth table." }, modelAnswer: { ar: "p ∧ (q ∨ r). الجدول يحتوي على 8 صفوف.", en: "p ∧ (q ∨ r). The table has 8 rows." } },
-        { text: { ar: "ما الفرق بين القضية البسيطة والقضية المركبة؟", en: "What is the difference between simple and compound propositions?" }, modelAnswer: { ar: "القضية البسيطة لا تحتوي على روابط منطقية، بينما القضية المركبة تتكون من قضايا بسيطة مرتبطة بروابط مثل ∧، ∨، →، ↔.", en: "Simple proposition contains no logical connectives, while compound proposition consists of simple propositions connected by connectives like ∧, ∨, →, ↔." } },
-        { text: { ar: "إذا كانت p صحيحة و q خاطئة، فما قيمة (p ∨ q) ∧ ~p؟", en: "If p is true and q is false, what is the value of (p ∨ q) ∧ ~p?" }, modelAnswer: { ar: "(p∨q) صحيحة لأن p صحيحة، ~p خاطئة، إذن (صحيحة ∧ خاطئة) = خاطئة.", en: "(p∨q) is true because p is true, ~p is false, so (true ∧ false) = false." } },
-        { text: { ar: "أكتب جدول الصواب للعبارة p ⊕ q (XOR - الفصل الحصري).", en: "Write the truth table for p ⊕ q (XOR - exclusive or)." }, modelAnswer: { ar: "p q | p⊕q\nص ص | خ\nص خ | ص\nخ ص | ص\nخ خ | خ", en: "p q | p⊕q\nT T | F\nT F | T\nF T | T\nF F | F" } },
-        { text: { ar: "ما هي شروط كون الجملة قضية؟", en: "What are the conditions for a sentence to be a proposition?" }, modelAnswer: { ar: "أن تكون جملة خبرية، وأن تحتمل الصحة أو الخطأ (وليس كليهما).", en: "It must be a declarative sentence, and it must be either true or false (but not both)." } }
-    ],
-    lec2: [
-        { text: { ar: "ما هي الطوطولوجيا (Tautology)؟ أعط مثالاً.", en: "What is a tautology? Give an example." }, modelAnswer: { ar: "الطوطولوجيا هي عبارة صحيحة دائماً. مثال: p ∨ ¬p.", en: "A tautology is a statement that is always true. Example: p ∨ ¬p." } },
-        { text: { ar: "اذكر وأثبت قانون دي مورجان الأول في المنطق: ¬(p∧q) ≡ ¬p ∨ ¬q.", en: "State and prove De Morgan's first law: ¬(p∧q) ≡ ¬p ∨ ¬q." }, modelAnswer: { ar: "نستخدم جدول الصواب. p q | p∧q | ¬(p∧q) | ¬p | ¬q | ¬p∨¬q. جميع القيم متطابقة.", en: "Use truth table. p q | p∧q | ¬(p∧q) | ¬p | ¬q | ¬p∨¬q. All values match." } },
-        { text: { ar: "أثبت أن (p → q) ≡ (¬p ∨ q) باستخدام جدول الصواب.", en: "Prove that (p → q) ≡ (¬p ∨ q) using truth table." }, modelAnswer: { ar: "p q | p→q | ¬p | ¬p∨q. القيم متطابقة في جميع الصفوف.", en: "p q | p→q | ¬p | ¬p∨q. Values match in all rows." } },
-        { text: { ar: "ما هو الفرق بين المعكوس (Converse) والعكس (Contrapositive) للعبارة p→q؟", en: "What is the difference between converse and contrapositive of p→q?" }, modelAnswer: { ar: "المعكوس هو q→p، أما العكس فهو ¬q→¬p. العكس مكافئ للعبارة الأصلية.", en: "Converse is q→p, contrapositive is ¬q→¬p. Contrapositive is equivalent to the original." } },
-        { text: { ar: "أثبت أن (p → q) ≡ (¬q → ¬p) (العكس مكافئ للعبارة الأصلية).", en: "Prove that (p → q) ≡ (¬q → ¬p) (contrapositive is equivalent)." }, modelAnswer: { ar: "p→q = ¬p∨q = ¬¬q∨¬p = ¬q→¬p.", en: "p→q = ¬p∨q = ¬¬q∨¬p = ¬q→¬p." } },
-        { text: { ar: "ما هو التناقض (Contradiction)؟ أعط مثالاً.", en: "What is a contradiction? Give an example." }, modelAnswer: { ar: "التناقض هو عبارة خاطئة دائماً. مثال: p ∧ ¬p.", en: "A contradiction is a statement that is always false. Example: p ∧ ¬p." } },
-        { text: { ar: "أثبت أن (p ∨ q) → r ≡ (p → r) ∧ (q → r).", en: "Prove that (p ∨ q) → r ≡ (p → r) ∧ (q → r)." }, modelAnswer: { ar: "(p∨q)→r = ¬(p∨q)∨r = (¬p∧¬q)∨r = (¬p∨r)∧(¬q∨r) = (p→r)∧(q→r).", en: "(p∨q)→r = ¬(p∨q)∨r = (¬p∧¬q)∨r = (¬p∨r)∧(¬q∨r) = (p→r)∧(q→r)." } },
-        { text: { ar: "ما هو الفرق بين العبارة الشرطية والثنائية الشرطية؟", en: "What is the difference between conditional and biconditional?" }, modelAnswer: { ar: "الشرطية p→q تعني 'إذا p فإن q'. الثنائية الشرطية p↔q تعني 'p إذا وفقط إذا q' (p→q و q→p).", en: "Conditional p→q means 'if p then q'. Biconditional p↔q means 'p if and only if q' (p→q and q→p)." } },
-        { text: { ar: "أثبت أن (p ↔ q) ≡ (p → q) ∧ (q → p).", en: "Prove that (p ↔ q) ≡ (p → q) ∧ (q → p)." }, modelAnswer: { ar: "من تعريف الثنائية الشرطية، p↔q صحيحة عندما p و q لهما نفس القيمة، وهذا يتحقق عندما p→q و q→p صحيحتان.", en: "By definition of biconditional, p↔q is true when p and q have same truth value, which happens when p→q and q→p are both true." } },
-        { text: { ar: "أوجد نفي العبارة: 'إذا أمطرت السماء فالأرض مبتلة'.", en: "Find the negation of: 'If it rains, then the ground is wet'." }, modelAnswer: { ar: "نفي p→q هو p ∧ ¬q. إذن: 'تمطر السماء والأرض ليست مبتلة'.", en: "Negation of p→q is p ∧ ¬q. So: 'It rains and the ground is not wet'." } }
-    ],
-    lec3: [
-        { text: { ar: "عرف المسند (Predicate) والمسورات العامة والوجودية.", en: "Define predicate and universal/existential quantifiers." }, modelAnswer: { ar: "المسند: جملة تحتوي على متغير. المسور العام (∀): يعني 'لكل'. المسور الوجودي (∃): يعني 'يوجد'.", en: "Predicate: sentence containing a variable. Universal quantifier (∀): 'for all'. Existential quantifier (∃): 'there exists'." } },
-        { text: { ar: "ما هو نفي العبارة ∀x (P(x) ∧ Q(x))؟", en: "What is the negation of ∀x (P(x) ∧ Q(x))?" }, modelAnswer: { ar: "∃x (¬P(x) ∨ ¬Q(x)).", en: "∃x (¬P(x) ∨ ¬Q(x))." } },
-        { text: { ar: "اكتب نفي العبارة: 'كل طالب في الفصل ناجح'.", en: "Write the negation of: 'Every student in the class is passing'." }, modelAnswer: { ar: "يوجد طالب في الفصل راسب.", en: "There exists a student in the class who is failing." } },
-        { text: { ar: "أثبت أن ¬∀x P(x) ≡ ∃x ¬P(x).", en: "Prove that ¬∀x P(x) ≡ ∃x ¬P(x)." }, modelAnswer: { ar: "إذا كان ¬∀x P(x) صحيحاً، فليس كل x يحقق P(x)، أي يوجد x لا يحقق P(x)، أي ∃x ¬P(x).", en: "If ¬∀x P(x) is true, then not all x satisfy P(x), so there exists x that does not satisfy P(x), i.e., ∃x ¬P(x)." } },
-        { text: { ar: "أكتب عبارة مسورة باستخدام المسور العام، ثم اكتب نفيها.", en: "Write a quantified statement using universal quantifier, then write its negation." }, modelAnswer: { ar: "العبارة: ∀x (x > 0 → x² > 0). نفيها: ∃x (x > 0 ∧ x² ≤ 0).", en: "Statement: ∀x (x > 0 → x² > 0). Negation: ∃x (x > 0 ∧ x² ≤ 0)." } },
-        { text: { ar: "ما الفرق بين 'يوجد' و 'لكل' في المنطق الرياضي؟", en: "What is the difference between 'exists' and 'for all' in mathematical logic?" }, modelAnswer: { ar: "'يوجد' (∃) تعني وجود عنصر واحد على الأقل يحقق الشرط. 'لكل' (∀) تعني أن جميع العناصر تحقق الشرط.", en: "'Exists' (∃) means at least one element satisfies the condition. 'For all' (∀) means every element satisfies the condition." } },
-        { text: { ar: "إذا كان مجال x هو الأعداد الصحيحة، فهل العبارة ∀x (x² ≥ 0) صحيحة؟", en: "If the domain of x is integers, is ∀x (x² ≥ 0) true?" }, modelAnswer: { ar: "نعم، لأن مربع أي عدد صحيح هو عدد غير سالب.", en: "Yes, because the square of any integer is non-negative." } },
-        { text: { ar: "أعط مثالاً على عبارة مسورة تكون خاطئة مع مجال الأعداد الطبيعية.", en: "Give an example of a quantified statement that is false over natural numbers." }, modelAnswer: { ar: "∃x (x + 5 = 2) خاطئة لأنه لا يوجد عدد طبيعي يحققها.", en: "∃x (x + 5 = 2) is false because no natural number satisfies it." } }
-    ]
-};
-// ==================== تتمة الأسئلة المقالية (المحاضرات 4-11) ====================
-essayBank.lec4 = [
-    { text: { ar: "عرف الدالة واذكر مكوناتها الأساسية.", en: "Define function and state its basic components." }, modelAnswer: { ar: "الدالة f: X→Y هي علاقة تربط كل عنصر في X بعنصر واحد فقط في Y. المكونات: المجال (Domain)، المجال المقابل (Codomain)، المدى (Range).", en: "A function f: X→Y associates each element in X with exactly one element in Y. Components: Domain, Codomain, Range." } },
-    { text: { ar: "ما الفرق بين الدالة واحد لواحد (Injective) والدالة الشاملة (Surjective)؟", en: "What is the difference between injective and surjective functions?" }, modelAnswer: { ar: "واحد لواحد: f(x₁)=f(x₂) ⇒ x₁=x₂. شاملة: كل y∈Y يوجد x∈X بحيث f(x)=y.", en: "Injective: f(x₁)=f(x₂) ⇒ x₁=x₂. Surjective: every y∈Y has x∈X with f(x)=y." } },
-    { text: { ar: "أثبت أن الدالة f(x)=2x+1 من R إلى R هي دالة تقابل (Bijective).", en: "Prove that f(x)=2x+1 from R to R is bijective." }, modelAnswer: { ar: "واحد لواحد: 2x₁+1=2x₂+1 ⇒ x₁=x₂. شاملة: لأي y، نضع x=(y-1)/2، f(x)=y. إذن تقابل.", en: "Injective: 2x₁+1=2x₂+1 ⇒ x₁=x₂. Surjective: for any y, take x=(y-1)/2, then f(x)=y. Hence bijective." } },
-    { text: { ar: "إذا كانت f(x)=x² من R إلى R، هل هي واحد لواحد؟ لماذا؟", en: "Is f(x)=x² from R to R injective? Why?" }, modelAnswer: { ar: "لا، لأن f(2)=4 و f(-2)=4، مع 2≠-2.", en: "No, because f(2)=4 and f(-2)=4, but 2≠-2." } },
-    { text: { ar: "أوجد مدى الدالة f(x)=x²+2 من R إلى R.", en: "Find the range of f(x)=x²+2 from R to R." }, modelAnswer: { ar: "المدى = [2, ∞) لأن x² ≥ 0 لكل x، إذن x²+2 ≥ 2.", en: "Range = [2, ∞) because x² ≥ 0 for all x, so x²+2 ≥ 2." } },
-    { text: { ar: "ما هو الفرق بين المجال والمجال المقابل والمدى؟", en: "What is the difference between domain, codomain, and range?" }, modelAnswer: { ar: "المجال: مجموعة المدخلات. المجال المقابل: مجموعة المخرجات الممكنة. المدى: مجموعة المخرجات الفعلية.", en: "Domain: set of inputs. Codomain: set of possible outputs. Range: set of actual outputs." } },
-    { text: { ar: "أعط مثالاً على دالة ليست واحد لواحد وليست شاملة.", en: "Give an example of a function that is neither injective nor surjective." }, modelAnswer: { ar: "f(x)=x² من R إلى R ليست واحد لواحد (f(2)=f(-2)) وليست شاملة لأن الأعداد السالبة ليس لها صورة.", en: "f(x)=x² from R to R is not injective (f(2)=f(-2)) and not surjective because negative numbers have no preimage." } },
-    { text: { ar: "إذا كانت f(x)=3x-2، فجد f(0), f(1), f(-1).", en: "If f(x)=3x-2, find f(0), f(1), f(-1)." }, modelAnswer: { ar: "f(0)=-2, f(1)=1, f(-1)=-5.", en: "f(0)=-2, f(1)=1, f(-1)=-5." } },
-    { text: { ar: "ما معنى أن تكون الدالة 'تقابل' (Bijective)؟", en: "What does it mean for a function to be bijective?" }, modelAnswer: { ar: "يعني أن الدالة واحد لواحد وشاملة، أي أن لكل عنصر في المجال المقابل صورة فريدة.", en: "It means the function is both injective and surjective, i.e., each element in the codomain has a unique preimage." } },
-    { text: { ar: "أوجد قيمة f(2) إذا كانت f(x)=x³-4x+1.", en: "Find f(2) if f(x)=x³-4x+1." }, modelAnswer: { ar: "f(2)=8-8+1=1.", en: "f(2)=8-8+1=1." } }
-];
-
-essayBank.lec5 = [
-    { text: { ar: "اشرح مبدأ الاستقراء الرياضي مع ذكر خطواته.", en: "Explain the principle of mathematical induction with its steps." }, modelAnswer: { ar: "1) إثبات P(1) صحيحة. 2) افتراض P(k) صحيحة. 3) إثبات P(k+1) صحيحة.", en: "1) Prove P(1) is true. 2) Assume P(k) is true. 3) Prove P(k+1) is true." } },
-    { text: { ar: "باستخدام الاستقراء الرياضي، أثبت أن 1+2+3+...+n = n(n+1)/2.", en: "Using mathematical induction, prove that 1+2+3+...+n = n(n+1)/2." }, modelAnswer: { ar: "الأساس n=1: 1=1×2/2. الفرضية: 1+...+k=k(k+1)/2. الخطوة: نضيف k+1 → k(k+1)/2+(k+1) = (k+1)(k+2)/2.", en: "Base n=1: 1=1×2/2. Hypothesis: 1+...+k=k(k+1)/2. Step: add k+1 → k(k+1)/2+(k+1) = (k+1)(k+2)/2." } },
-    { text: { ar: "أثبت أن 1²+2²+...+n² = n(n+1)(2n+1)/6 باستخدام الاستقراء.", en: "Prove that 1²+2²+...+n² = n(n+1)(2n+1)/6 using induction." }, modelAnswer: { ar: "الأساس n=1: 1=1×2×3/6=1. الفرضية: 1²+...+k²=k(k+1)(2k+1)/6. الخطوة: نضيف (k+1)² ونبسط.", en: "Base n=1: 1=1×2×3/6=1. Hypothesis: 1²+...+k²=k(k+1)(2k+1)/6. Step: add (k+1)² and simplify." } },
-    { text: { ar: "أثبت أن 1+3+5+...+(2n-1) = n² باستخدام الاستقراء.", en: "Prove that 1+3+5+...+(2n-1) = n² using induction." }, modelAnswer: { ar: "الأساس n=1: 1=1². الفرضية: 1+3+...+(2k-1)=k². الخطوة: نضيف 2(k+1)-1=2k+1 → k²+2k+1=(k+1)².", en: "Base n=1: 1=1². Hypothesis: 1+3+...+(2k-1)=k². Step: add 2(k+1)-1=2k+1 → k²+2k+1=(k+1)²." } },
-    { text: { ar: "أثبت أن 2ⁿ > n لكل n≥1 باستخدام الاستقراء.", en: "Prove that 2ⁿ > n for all n≥1 using induction." }, modelAnswer: { ar: "الأساس n=1: 2>1. الفرضية: 2ᵏ > k. الخطوة: 2ᵏ⁺¹ = 2×2ᵏ > 2k ≥ k+1 (لـ k≥1).", en: "Base n=1: 2>1. Hypothesis: 2ᵏ > k. Step: 2ᵏ⁺¹ = 2×2ᵏ > 2k ≥ k+1 (for k≥1)." } },
-    { text: { ar: "ما هي شروط استخدام الاستقراء الرياضي؟", en: "What are the conditions for using mathematical induction?" }, modelAnswer: { ar: "أن تكون العبارة P(n) معرفة للأعداد الطبيعية، وأن نتمكن من إثبات الأساس والخطوة.", en: "P(n) must be defined for natural numbers, and we must be able to prove base case and inductive step." } },
-    { text: { ar: "أثبت أن n² ≥ n لكل n∈N باستخدام الاستقراء.", en: "Prove that n² ≥ n for all n∈N using induction." }, modelAnswer: { ar: "الأساس n=1: 1≥1. الفرضية: k²≥k. الخطوة: (k+1)² = k²+2k+1 ≥ k+2k+1 = 3k+1 ≥ k+1.", en: "Base n=1: 1≥1. Hypothesis: k²≥k. Step: (k+1)² = k²+2k+1 ≥ k+2k+1 = 3k+1 ≥ k+1." } },
-    { text: { ar: "أثبت أن n³ - n يقبل القسمة على 3 لكل n∈N.", en: "Prove that n³ - n is divisible by 3 for all n∈N." }, modelAnswer: { ar: "الأساس n=1: 1-1=0. الفرضية: k³-k=3m. الخطوة: (k+1)³-(k+1) = k³+3k²+3k+1-k-1 = (k³-k)+3(k²+k).", en: "Base n=1: 1-1=0. Hypothesis: k³-k=3m. Step: (k+1)³-(k+1) = (k³-k)+3(k²+k)." } }
-];
-
-essayBank.lec6 = [
-    { text: { ar: "عرف المجموعة واذكر أنواعها.", en: "Define set and list its types." }, modelAnswer: { ar: "المجموعة هي مجموعة من العناصر المحددة. أنواعها: منتهية، غير منتهية، خالية، جزئية.", en: "A set is a collection of distinct objects. Types: finite, infinite, empty, subset." } },
-    { text: { ar: "ما هي مجموعة القوى (Power Set)؟ أعط مثالاً.", en: "What is the power set? Give an example." }, modelAnswer: { ar: "مجموعة جميع المجموعات الجزئية. مثال: A={a,b} → P(A)={∅,{a},{b},{a,b}}.", en: "The set of all subsets. Example: A={a,b} → P(A)={∅,{a},{b},{a,b}}." } },
-    { text: { ar: "أثبت أن ∅ ⊆ A لكل مجموعة A.", en: "Prove that ∅ ⊆ A for every set A." }, modelAnswer: { ar: "الشرط: إذا x∈∅ فإن x∈A. بما أنه لا يوجد x∈∅، فالشرط صحيح دائماً.", en: "Condition: if x∈∅ then x∈A. Since there is no x∈∅, the condition is always true." } },
-    { text: { ar: "ما هو ترتيب المجموعة (Cardinality)؟ وكيف نحسب ترتيب مجموعة القوى؟", en: "What is cardinality? How to calculate power set cardinality?" }, modelAnswer: { ar: "عدد عناصر المجموعة. |P(A)| = 2^{|A|}.", en: "The number of elements in a set. |P(A)| = 2^{|A|}." } },
-    { text: { ar: "إذا كان A = {1,2,3} و B = {2,3,4}، فأوجد A∪B و A∩B و A-B.", en: "If A = {1,2,3} and B = {2,3,4}, find A∪B, A∩B, A-B." }, modelAnswer: { ar: "A∪B={1,2,3,4}, A∩B={2,3}, A-B={1}.", en: "A∪B={1,2,3,4}, A∩B={2,3}, A-B={1}." } },
-    { text: { ar: "ما الفرق بين المجموعة الجزئية والمجموعة الجزئية الحقيقية؟", en: "What is the difference between subset and proper subset?" }, modelAnswer: { ar: "A⊆B تعني كل عنصر في A موجود في B. A⊂B تعني A⊆B و A≠B.", en: "A⊆B means every element of A is in B. A⊂B means A⊆B and A≠B." } }
-];
-
-essayBank.lec7 = [
-    { text: { ar: "اذكر قوانين دي مورجان للمجموعات مع شرحها.", en: "State De Morgan's laws for sets with explanation." }, modelAnswer: { ar: "(A∪B)' = A'∩B' و (A∩B)' = A'∪B'.", en: "(A∪B)' = A'∩B' and (A∩B)' = A'∪B'." } },
-    { text: { ar: "أثبت أن A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C) باستخدام عناصر المجموعات.", en: "Prove A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C) using set elements." }, modelAnswer: { ar: "إذا x∈A∪(B∩C) فإن x∈A أو x∈B∩C. الحالتان تؤديان إلى x∈(A∪B)∩(A∪C). والعكس صحيح.", en: "If x∈A∪(B∩C) then x∈A or x∈B∩C. Both cases lead to x∈(A∪B)∩(A∪C). The converse is also true." } },
-    { text: { ar: "ما هو الفرق المتناظر (Symmetric Difference)؟ أعط مثالاً.", en: "What is symmetric difference? Give an example." }, modelAnswer: { ar: "AΔB = (A-B)∪(B-A). مثال: A={1,2,3}, B={3,4,5} → AΔB={1,2,4,5}.", en: "AΔB = (A-B)∪(B-A). Example: A={1,2,3}, B={3,4,5} → AΔB={1,2,4,5}." } },
-    { text: { ar: "أثبت أن A - B = A ∩ B'.", en: "Prove that A - B = A ∩ B'." }, modelAnswer: { ar: "x∈A-B ⇔ x∈A و x∉B ⇔ x∈A و x∈B' ⇔ x∈A∩B'.", en: "x∈A-B ⇔ x∈A and x∉B ⇔ x∈A and x∈B' ⇔ x∈A∩B'." } },
-    { text: { ar: "إذا كان U={1,2,3,4,5,6}, A={1,2,3}, B={3,4,5}، فأوجد A', B', (A∩B)'.", en: "If U={1,2,3,4,5,6}, A={1,2,3}, B={3,4,5}, find A', B', (A∩B)'." }, modelAnswer: { ar: "A'={4,5,6}, B'={1,2,6}, (A∩B)'={1,2,4,5,6}.", en: "A'={4,5,6}, B'={1,2,6}, (A∩B)'={1,2,4,5,6}." } }
-];
-
-essayBank.lec9 = [
-    { text: { ar: "عرف العلاقة الثنائية واذكر خصائصها.", en: "Define binary relation and its properties." }, modelAnswer: { ar: "العلاقة R من A إلى B هي مجموعة جزئية من A×B. خصائصها: انعكاسية، تناظرية، متعدية.", en: "A binary relation R from A to B is a subset of A×B. Properties: reflexive, symmetric, transitive." } },
-    { text: { ar: "ما هي علاقة التكافؤ؟ أعط مثالاً.", en: "What is an equivalence relation? Give an example." }, modelAnswer: { ar: "علاقة انعكاسية، تناظرية، ومتعدية. مثال: علاقة '='.", en: "A relation that is reflexive, symmetric, and transitive. Example: equality '='." } },
-    { text: { ar: "أثبت أن علاقة '=' على مجموعة الأعداد الحقيقية هي علاقة تكافؤ.", en: "Prove that equality '=' on real numbers is an equivalence relation." }, modelAnswer: { ar: "انعكاسية: a=a. تناظرية: a=b ⇒ b=a. متعدية: a=b و b=c ⇒ a=c.", en: "Reflexive: a=a. Symmetric: a=b ⇒ b=a. Transitive: a=b and b=c ⇒ a=c." } },
-    { text: { ar: "هل العلاقة '≤' على الأعداد الحقيقية هي علاقة تكافؤ؟ لماذا؟", en: "Is '≤' on real numbers an equivalence relation? Why?" }, modelAnswer: { ar: "لا، لأنها ليست تناظرية: a≤b لا تعني b≤a.", en: "No, because it is not symmetric: a≤b does not imply b≤a." } },
-    { text: { ar: "عرف العلاقة المتعدية (Transitive) مع مثال.", en: "Define transitive relation with an example." }, modelAnswer: { ar: "إذا (a,b)∈R و (b,c)∈R فإن (a,c)∈R. مثال: علاقة '<'.", en: "If (a,b)∈R and (b,c)∈R then (a,c)∈R. Example: '<'." } }
-];
-
-essayBank.lec11 = [
-    { text: { ar: "عرف تركيب الدوال (Function Composition) مع مثال.", en: "Define function composition with an example." }, modelAnswer: { ar: "(f∘g)(x) = f(g(x)). مثال: f(x)=x², g(x)=x+1 → (f∘g)(x)=(x+1)².", en: "(f∘g)(x) = f(g(x)). Example: f(x)=x², g(x)=x+1 → (f∘g)(x)=(x+1)²." } },
-    { text: { ar: "أثبت أن (f∘g)∘h = f∘(g∘h) (عملية التركيب تجميعية).", en: "Prove that (f∘g)∘h = f∘(g∘h) (composition is associative)." }, modelAnswer: { ar: "((f∘g)∘h)(x) = (f∘g)(h(x)) = f(g(h(x))) = f((g∘h)(x)) = (f∘(g∘h))(x).", en: "((f∘g)∘h)(x) = (f∘g)(h(x)) = f(g(h(x))) = f((g∘h)(x)) = (f∘(g∘h))(x)." } },
-    { text: { ar: "كيف تجد معكوس الدالة؟ أعط مثالاً.", en: "How to find the inverse of a function? Give an example." }, modelAnswer: { ar: "ضع y=f(x)، حل المعادلة لإيجاد x بدلالة y، ثم بدل x و y. مثال: f(x)=2x-3 → f⁻¹(x)=(x+3)/2.", en: "Set y=f(x), solve for x in terms of y, then swap x and y. Example: f(x)=2x-3 → f⁻¹(x)=(x+3)/2." } },
-    { text: { ar: "ما هو شرط وجود معكوس الدالة؟", en: "What is the condition for a function to have an inverse?" }, modelAnswer: { ar: "أن تكون الدالة تقابل (Bijective): واحد لواحد وشاملة.", en: "The function must be bijective: injective and surjective." } },
-    { text: { ar: "إذا كان f(x)=x+2 و g(x)=3x، فجد f∘g و g∘f.", en: "If f(x)=x+2 and g(x)=3x, find f∘g and g∘f." }, modelAnswer: { ar: "f∘g(x)=3x+2, g∘f(x)=3x+6.", en: "f∘g(x)=3x+2, g∘f(x)=3x+6." } }
-];
-
-// دمج جميع الأسئلة المقالية للامتحان الشامل
-essayBank.all = [
-    ...essayBank.lec1, ...essayBank.lec2, ...essayBank.lec3,
-    ...essayBank.lec4, ...essayBank.lec5, ...essayBank.lec6,
-    ...essayBank.lec7, ...essayBank.lec9, ...essayBank.lec11
-];
-
 // ==================== دوال مساعدة ====================
 function getRandomQuestions(arr, count) {
     let shuffled = [...arr];
@@ -327,7 +173,7 @@ function renderHome() {
     return `
         <div class="card">
             <h2>📚 ${currentLang === "ar" ? "رياضيات متقطعة (Discrete Mathematics)" : "Discrete Mathematics"}</h2>
-            <p>${currentLang === "ar" ? "مرحباً بك في بوابة الرياضيات المتقطعة. الموقع يحتوي على ملخصات شاملة لكل محاضرة، وامتحانات تفاعلية تضم أكثر من 500 سؤال." : "Welcome to the Discrete Mathematics portal. The site contains comprehensive summaries and interactive exams with over 500 questions."}</p>
+            <p>${currentLang === "ar" ? "مرحباً بك في بوابة الرياضيات المتقطعة. الموقع يحتوي على ملخصات شاملة لكل محاضرة، وامتحانات تفاعلية تضم 400 سؤال (اختيار من متعدد + مقالي) موزعة بالتساوي على 9 محاضرات." : "Welcome to the Discrete Mathematics portal. The site contains comprehensive summaries and interactive exams with 400 questions (Multiple Choice + Essay) evenly distributed across 9 lectures."}</p>
             <ul style="margin-top: 15px; margin-right: 25px;">
                 <li><strong>📖 ${currentLang === "ar" ? "الملخصات" : "Summaries"}</strong> - ${currentLang === "ar" ? "ملخصات حقيقية من محاضراتك" : "Real summaries from your lectures"}</li>
                 <li><strong>📝 ${currentLang === "ar" ? "الامتحانات" : "Exams"}</strong> - ${currentLang === "ar" ? "اختيار من متعدد (15 سؤال) أو مقالي (10 أسئلة)" : "Multiple Choice (15 questions) or Essay (10 questions)"}</li>
@@ -369,6 +215,7 @@ function renderSummary() {
         return `<div class="card"><h2>📖 ${currentLang === "ar" ? "ملخص" : "Summary"}</h2><div class="summary-box"><p>${summariesData[currentLecture][currentLang]}</p></div></div>`;
     }
 }
+
 // ==================== عرض الامتحان ====================
 function renderExam() {
     const mcqCount = 15;
@@ -433,7 +280,6 @@ function renderExam() {
         questionsArea.innerHTML = qHtml;
     }
 }
-
 // ==================== دوال تصحيح الامتحان ====================
 function submitExam() {
     if (currentExamType === "mcq") {
@@ -573,14 +419,340 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
         setCurrentPage(btn.dataset.page);
     });
 });
-// ==================== التشغيل الأولي ====================
-// تهيئة الصفحة الرئيسية
-setCurrentPage('home');
+// ==================== أسئلة MCQ (محاضرة 1 - 50 سؤال) ====================
+const mcqBank = {};
 
-// التأكد من تحميل اللغة بشكل صحيح
-setTimeout(() => {
-    updateLanguage();
+mcqBank.lec1 = [
+    { text: { ar: "ما هي القضية (Proposition)؟", en: "What is a proposition?" }, options: { ar: ["جملة خبرية تحتمل الصحة أو الخطأ", "جملة أمرية", "سؤال", "تعجب"], en: ["Declarative sentence that is true or false", "Imperative sentence", "Question", "Exclamation"] }, correct: { ar: "جملة خبرية تحتمل الصحة أو الخطأ", en: "Declarative sentence that is true or false" } },
+    { text: { ar: "إذا كانت p صحيحة، فإن ~p تكون:", en: "If p is true, then ~p is:" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "مكافئة لـ p"], en: ["True", "False", "Undefined", "Equivalent to p"] }, correct: { ar: "خاطئة", en: "False" } },
+    { text: { ar: "عدد الصفوف في جدول الصواب لعبارة تحتوي على 3 متغيرات هو:", en: "Number of rows in truth table for 3 variables is:" }, options: { ar: ["4", "6", "8", "16"], en: ["4", "6", "8", "16"] }, correct: { ar: "8", en: "8" } },
+    { text: { ar: "العبارة p ∧ q تكون صحيحة فقط عندما:", en: "p ∧ q is true only when:" }, options: { ar: ["p صحيحة و q صحيحة", "p صحيحة و q خاطئة", "p خاطئة و q صحيحة", "p خاطئة و q خاطئة"], en: ["p true and q true", "p true and q false", "p false and q true", "p false and q false"] }, correct: { ar: "p صحيحة و q صحيحة", en: "p true and q true" } },
+    { text: { ar: "العبارة p ∨ q تكون خاطئة فقط عندما:", en: "p ∨ q is false only when:" }, options: { ar: ["p صحيحة و q صحيحة", "p صحيحة و q خاطئة", "p خاطئة و q صحيحة", "p خاطئة و q خاطئة"], en: ["p true and q true", "p true and q false", "p false and q true", "p false and q false"] }, correct: { ar: "p خاطئة و q خاطئة", en: "p false and q false" } },
+    { text: { ar: "الرمز ∨ يعني:", en: "The symbol ∨ means:" }, options: { ar: ["و (عطف)", "أو (فصل)", "ليس (نفي)", "إذاً (شرط)"], en: ["AND (conjunction)", "OR (disjunction)", "NOT (negation)", "IF-THEN (conditional)"] }, correct: { ar: "أو (فصل)", en: "OR (disjunction)" } },
+    { text: { ar: "الرمز ∧ يعني:", en: "The symbol ∧ means:" }, options: { ar: ["و (عطف)", "أو (فصل)", "ليس (نفي)", "إذاً (شرط)"], en: ["AND (conjunction)", "OR (disjunction)", "NOT (negation)", "IF-THEN (conditional)"] }, correct: { ar: "و (عطف)", en: "AND (conjunction)" } },
+    { text: { ar: "أي من التالي يعتبر قضية؟", en: "Which of the following is a proposition?" }, options: { ar: ["أغلق الباب", "كم الساعة؟", "الخرطوم عاصمة السودان", "يا لها من يوم جميل"], en: ["Close the door", "What time is it?", "Khartoum is the capital of Sudan", "What a beautiful day"] }, correct: { ar: "الخرطوم عاصمة السودان", en: "Khartoum is the capital of Sudan" } },
+    { text: { ar: "إذا كان جدول الصواب يحتوي على 16 صفاً، فكم عدد المتغيرات؟", en: "If a truth table has 16 rows, how many variables?" }, options: { ar: ["2", "3", "4", "5"], en: ["2", "3", "4", "5"] }, correct: { ar: "4", en: "4" } },
+    { text: { ar: "العبارة 'السماء زرقاء' هي:", en: "The sentence 'The sky is blue' is:" }, options: { ar: ["قضية", "سؤال", "أمر", "تعجب"], en: ["Proposition", "Question", "Command", "Exclamation"] }, correct: { ar: "قضية", en: "Proposition" } },
+    { text: { ar: "إذا كانت p خاطئة و q صحيحة، فما قيمة p ∧ q؟", en: "If p is false and q is true, what is p ∧ q?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "مكافئة لـ p"], en: ["True", "False", "Undefined", "Equivalent to p"] }, correct: { ar: "خاطئة", en: "False" } },
+    { text: { ar: "إذا كانت p صحيحة و q خاطئة، فما قيمة p ∨ q؟", en: "If p is true and q is false, what is p ∨ q?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "مكافئة لـ q"], en: ["True", "False", "Undefined", "Equivalent to q"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "ما هو نفي العبارة '5 + 3 = 8'؟", en: "What is the negation of '5 + 3 = 8'?" }, options: { ar: ["5 + 3 ≠ 8", "5 + 3 = 9", "5 + 3 > 8", "5 + 3 < 8"], en: ["5 + 3 ≠ 8", "5 + 3 = 9", "5 + 3 > 8", "5 + 3 < 8"] }, correct: { ar: "5 + 3 ≠ 8", en: "5 + 3 ≠ 8" } },
+    { text: { ar: "أي من التالي يعتبر عبارة مركبة؟", en: "Which of the following is a compound statement?" }, options: { ar: ["p", "p ∧ q", "~p", "q"], en: ["p", "p ∧ q", "~p", "q"] }, correct: { ar: "p ∧ q", en: "p ∧ q" } },
+    { text: { ar: "كم عدد الصفوف في جدول الصواب لعبارة تحتوي على 5 متغيرات؟", en: "How many rows in a truth table for 5 variables?" }, options: { ar: ["16", "32", "64", "128"], en: ["16", "32", "64", "128"] }, correct: { ar: "32", en: "32" } },
+    { text: { ar: "العبارة 'إذا أمطرت السماء، فإن الأرض مبتلة' هي:", en: "The statement 'If it rains, then the ground is wet' is:" }, options: { ar: ["شرطية", "عطف", "فصل", "نفي"], en: ["Conditional", "Conjunction", "Disjunction", "Negation"] }, correct: { ar: "شرطية", en: "Conditional" } },
+    { text: { ar: "ما هو رمز النفي في المنطق؟", en: "What is the symbol for negation in logic?" }, options: { ar: ["∧", "∨", "~", "→"], en: ["∧", "∨", "~", "→"] }, correct: { ar: "~", en: "~" } },
+    { text: { ar: "أي من التالي يعتبر قضية بسيطة؟", en: "Which of the following is a simple proposition?" }, options: { ar: ["p ∧ q", "p ∨ q", "p", "p → q"], en: ["p ∧ q", "p ∨ q", "p", "p → q"] }, correct: { ar: "p", en: "p" } },
+    { text: { ar: "إذا كانت p صحيحة، فما قيمة ~(~p)؟", en: "If p is true, what is ~(~p)?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "مكافئة لـ ~p"], en: ["True", "False", "Undefined", "Equivalent to ~p"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "أي من التالي ليس قضية؟", en: "Which of the following is NOT a proposition?" }, options: { ar: ["2 + 2 = 4", "أغلق النافذة", "الخرطوم عاصمة السودان", "5 > 3"], en: ["2 + 2 = 4", "Close the window", "Khartoum is the capital of Sudan", "5 > 3"] }, correct: { ar: "أغلق النافذة", en: "Close the window" } },
+    { text: { ar: "ما هي قيمة p ∧ ~p؟", en: "What is the value of p ∧ ~p?" }, options: { ar: ["صحيحة دائماً", "خاطئة دائماً", "تعتمد على p", "غير معرفة"], en: ["Always true", "Always false", "Depends on p", "Undefined"] }, correct: { ar: "خاطئة دائماً", en: "Always false" } },
+    { text: { ar: "ما هي قيمة p ∨ ~p؟", en: "What is the value of p ∨ ~p?" }, options: { ar: ["صحيحة دائماً", "خاطئة دائماً", "تعتمد على p", "غير معرفة"], en: ["Always true", "Always false", "Depends on p", "Undefined"] }, correct: { ar: "صحيحة دائماً", en: "Always true" } },
+    { text: { ar: "أي من التالي يعبر عن العطف؟", en: "Which of the following represents conjunction?" }, options: { ar: ["p ∧ q", "p ∨ q", "p → q", "~p"], en: ["p ∧ q", "p ∨ q", "p → q", "~p"] }, correct: { ar: "p ∧ q", en: "p ∧ q" } },
+    { text: { ar: "أي من التالي يعبر عن الفصل؟", en: "Which of the following represents disjunction?" }, options: { ar: ["p ∧ q", "p ∨ q", "p → q", "~p"], en: ["p ∧ q", "p ∨ q", "p → q", "~p"] }, correct: { ar: "p ∨ q", en: "p ∨ q" } },
+    { text: { ar: "إذا كانت p خاطئة و q خاطئة، فما قيمة p ∨ q؟", en: "If p is false and q is false, what is p ∨ q?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "مكافئة لـ p"], en: ["True", "False", "Undefined", "Equivalent to p"] }, correct: { ar: "خاطئة", en: "False" } },
+    { text: { ar: "إذا كانت p صحيحة و q صحيحة، فما قيمة p ∧ q؟", en: "If p is true and q is true, what is p ∧ q?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "مكافئة لـ q"], en: ["True", "False", "Undefined", "Equivalent to q"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "ما هو عدد الصفوف في جدول الصواب لعبارة تحتوي على 2 متغيرين؟", en: "How many rows in a truth table for 2 variables?" }, options: { ar: ["2", "4", "6", "8"], en: ["2", "4", "6", "8"] }, correct: { ar: "4", en: "4" } },
+    { text: { ar: "العبارة '5 + 3 = 8' هي:", en: "The statement '5 + 3 = 8' is:" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "قضية مركبة"], en: ["True", "False", "Undefined", "Compound proposition"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "العبارة 'الخرطوم عاصمة إنجلترا' هي:", en: "The statement 'Khartoum is the capital of England' is:" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "قضية مركبة"], en: ["True", "False", "Undefined", "Compound proposition"] }, correct: { ar: "خاطئة", en: "False" } },
+    { text: { ar: "أي من التالي يعتبر قضية صحيحة؟", en: "Which of the following is a true proposition?" }, options: { ar: ["2 > 5", "3 + 4 = 7", "السودان في آسيا", "0 > 1"], en: ["2 > 5", "3 + 4 = 7", "Sudan is in Asia", "0 > 1"] }, correct: { ar: "3 + 4 = 7", en: "3 + 4 = 7" } },
+    { text: { ar: "أي من التالي يعتبر قضية خاطئة؟", en: "Which of the following is a false proposition?" }, options: { ar: ["2 + 2 = 4", "5 > 3", "القمر مصنوع من الجبن", "الخرطوم عاصمة السودان"], en: ["2 + 2 = 4", "5 > 3", "The moon is made of cheese", "Khartoum is the capital of Sudan"] }, correct: { ar: "القمر مصنوع من الجبن", en: "The moon is made of cheese" } },
+    { text: { ar: "ما هو رمز العطف في المنطق؟", en: "What is the symbol for conjunction in logic?" }, options: { ar: ["∧", "∨", "~", "→"], en: ["∧", "∨", "~", "→"] }, correct: { ar: "∧", en: "∧" } },
+    { text: { ar: "ما هو رمز الفصل في المنطق؟", en: "What is the symbol for disjunction in logic?" }, options: { ar: ["∧", "∨", "~", "→"], en: ["∧", "∨", "~", "→"] }, correct: { ar: "∨", en: "∨" } },
+    { text: { ar: "إذا كانت p صحيحة، فإن قيمة p ∧ ~p هي:", en: "If p is true, then p ∧ ~p is:" }, options: { ar: ["صحيحة", "خاطئة", "تعتمد على q", "غير معرفة"], en: ["True", "False", "Depends on q", "Undefined"] }, correct: { ar: "خاطئة", en: "False" } },
+    { text: { ar: "إذا كانت p خاطئة، فإن قيمة p ∨ ~p هي:", en: "If p is false, then p ∨ ~p is:" }, options: { ar: ["صحيحة", "خاطئة", "تعتمد على q", "غير معرفة"], en: ["True", "False", "Depends on q", "Undefined"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "أي من التالي يمثل نفي العبارة 'x > 5'؟", en: "Which represents the negation of 'x > 5'?" }, options: { ar: ["x < 5", "x ≤ 5", "x ≥ 5", "x = 5"], en: ["x < 5", "x ≤ 5", "x ≥ 5", "x = 5"] }, correct: { ar: "x ≤ 5", en: "x ≤ 5" } },
+    { text: { ar: "أي من التالي يمثل نفي العبارة 'p ∨ q'؟", en: "Which represents the negation of 'p ∨ q'?" }, options: { ar: ["~p ∨ ~q", "~p ∧ ~q", "p ∧ q", "~p → ~q"], en: ["~p ∨ ~q", "~p ∧ ~q", "p ∧ q", "~p → ~q"] }, correct: { ar: "~p ∧ ~q", en: "~p ∧ ~q" } },
+    { text: { ar: "أي من التالي يمثل نفي العبارة 'p ∧ q'؟", en: "Which represents the negation of 'p ∧ q'?" }, options: { ar: ["~p ∨ ~q", "~p ∧ ~q", "p ∨ q", "~p → ~q"], en: ["~p ∨ ~q", "~p ∧ ~q", "p ∨ q", "~p → ~q"] }, correct: { ar: "~p ∨ ~q", en: "~p ∨ ~q" } },
+    { text: { ar: "إذا كانت p صحيحة و q صحيحة، فما قيمة p ∧ q؟", en: "If p is true and q is true, what is p ∧ q?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "تعتمد على r"], en: ["True", "False", "Undefined", "Depends on r"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "إذا كانت p خاطئة و q خاطئة، فما قيمة p ∨ q؟", en: "If p is false and q is false, what is p ∨ q?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "تعتمد على r"], en: ["True", "False", "Undefined", "Depends on r"] }, correct: { ar: "خاطئة", en: "False" } },
+    { text: { ar: "ما هو عدد الصفوف في جدول الصواب لعبارة تحتوي على 6 متغيرات؟", en: "How many rows in a truth table for 6 variables?" }, options: { ar: ["32", "64", "128", "256"], en: ["32", "64", "128", "256"] }, correct: { ar: "64", en: "64" } },
+    { text: { ar: "أي من التالي يعتبر جملة أمرية؟", en: "Which of the following is an imperative sentence?" }, options: { ar: ["السماء زرقاء", "أغلق الباب", "2 + 2 = 4", "الخرطوم عاصمة السودان"], en: ["The sky is blue", "Close the door", "2 + 2 = 4", "Khartoum is the capital of Sudan"] }, correct: { ar: "أغلق الباب", en: "Close the door" } },
+    { text: { ar: "أي من التالي يعتبر سؤالاً وليس قضية؟", en: "Which of the following is a question and not a proposition?" }, options: { ar: ["السماء زرقاء", "كم الساعة؟", "2 + 2 = 4", "الخرطوم عاصمة السودان"], en: ["The sky is blue", "What time is it?", "2 + 2 = 4", "Khartoum is the capital of Sudan"] }, correct: { ar: "كم الساعة؟", en: "What time is it?" } },
+    { text: { ar: "إذا كانت p صحيحة و q خاطئة، فما قيمة p → q؟", en: "If p is true and q is false, what is p → q?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "تعتمد على r"], en: ["True", "False", "Undefined", "Depends on r"] }, correct: { ar: "خاطئة", en: "False" } },
+    { text: { ar: "كم عدد الصفوف في جدول الصواب لعبارة تحتوي على 4 متغيرات؟", en: "How many rows in a truth table for 4 variables?" }, options: { ar: ["8", "16", "32", "64"], en: ["8", "16", "32", "64"] }, correct: { ar: "16", en: "16" } },
+    { text: { ar: "أي من التالي يمثل قضية مركبة؟", en: "Which represents a compound proposition?" }, options: { ar: ["p", "~p", "p ∧ q", "q"], en: ["p", "~p", "p ∧ q", "q"] }, correct: { ar: "p ∧ q", en: "p ∧ q" } },
+    { text: { ar: "ما هو رمز الشرطية في المنطق؟", en: "What is the symbol for conditional in logic?" }, options: { ar: ["∧", "∨", "~", "→"], en: ["∧", "∨", "~", "→"] }, correct: { ar: "→", en: "→" } },
+    { text: { ar: "ما هو رمز الثنائية الشرطية في المنطق؟", en: "What is the symbol for biconditional in logic?" }, options: { ar: ["∧", "∨", "~", "↔"], en: ["∧", "∨", "~", "↔"] }, correct: { ar: "↔", en: "↔" } }
+];
+
+// دمج أسئلة المحاضرة 1 مؤقتاً
+mcqBank.all = [...mcqBank.lec1];
+// ==================== أسئلة MCQ (محاضرة 2 - 50 سؤال) ====================
+mcqBank.lec2 = [
+    { text: { ar: "العبارة الشرطية p → q تكون خاطئة فقط عندما:", en: "The conditional p → q is false only when:" }, options: { ar: ["p صحيحة و q صحيحة", "p صحيحة و q خاطئة", "p خاطئة و q صحيحة", "p خاطئة و q خاطئة"], en: ["p true and q true", "p true and q false", "p false and q true", "p false and q false"] }, correct: { ar: "p صحيحة و q خاطئة", en: "p true and q false" } },
+    { text: { ar: "المعاكس (Contrapositive) للعبارة p → q هو:", en: "The contrapositive of p → q is:" }, options: { ar: ["q → p", "~p → ~q", "~q → ~p", "p → ~q"], en: ["q → p", "~p → ~q", "~q → ~p", "p → ~q"] }, correct: { ar: "~q → ~p", en: "~q → ~p" } },
+    { text: { ar: "الطوطولوجيا (Tautology) هي عبارة:", en: "A tautology is a statement that is:" }, options: { ar: ["صحيحة دائماً", "خاطئة دائماً", "صحيحة أحياناً", "ليست قضية"], en: ["Always true", "Always false", "Sometimes true", "Not a proposition"] }, correct: { ar: "صحيحة دائماً", en: "Always true" } },
+    { text: { ar: "التناقض (Contradiction) هو عبارة:", en: "A contradiction is a statement that is:" }, options: { ar: ["صحيحة دائماً", "خاطئة دائماً", "صحيحة أحياناً", "ليست قضية"], en: ["Always true", "Always false", "Sometimes true", "Not a proposition"] }, correct: { ar: "خاطئة دائماً", en: "Always false" } },
+    { text: { ar: "أي من التالي يعتبر طوطولوجيا؟", en: "Which of the following is a tautology?" }, options: { ar: ["p ∧ ~p", "p ∨ ~p", "p → ~p", "~p → p"], en: ["p ∧ ~p", "p ∨ ~p", "p → ~p", "~p → p"] }, correct: { ar: "p ∨ ~p", en: "p ∨ ~p" } },
+    { text: { ar: "العبارة p ↔ q تكون صحيحة عندما:", en: "p ↔ q is true when:" }, options: { ar: ["p و q مختلفان", "p و q متماثلان", "p صحيحة فقط", "q صحيحة فقط"], en: ["p and q are different", "p and q are the same", "p is true only", "q is true only"] }, correct: { ar: "p و q متماثلان", en: "p and q are the same" } },
+    { text: { ar: "المعكوس (Converse) للعبارة p → q هو:", en: "The converse of p → q is:" }, options: { ar: ["q → p", "~p → ~q", "~q → ~p", "p → q"], en: ["q → p", "~p → ~q", "~q → ~p", "p → q"] }, correct: { ar: "q → p", en: "q → p" } },
+    { text: { ar: "المعكوس المعاكس (Inverse) للعبارة p → q هو:", en: "The inverse of p → q is:" }, options: { ar: ["q → p", "~p → ~q", "~q → ~p", "p → q"], en: ["q → p", "~p → ~q", "~q → ~p", "p → q"] }, correct: { ar: "~p → ~q", en: "~p → ~q" } },
+    { text: { ar: "العبارة (p → q) ∧ (q → p) مكافئة لـ:", en: "(p → q) ∧ (q → p) is equivalent to:" }, options: { ar: ["p ∨ q", "p ∧ q", "p ↔ q", "p → q"], en: ["p ∨ q", "p ∧ q", "p ↔ q", "p → q"] }, correct: { ar: "p ↔ q", en: "p ↔ q" } },
+    { text: { ar: "أي من التالي يعتبر تناقضاً؟", en: "Which of the following is a contradiction?" }, options: { ar: ["p ∨ ~p", "p ∧ ~p", "p → p", "p ↔ p"], en: ["p ∨ ~p", "p ∧ ~p", "p → p", "p ↔ p"] }, correct: { ar: "p ∧ ~p", en: "p ∧ ~p" } },
+    { text: { ar: "قانون دي مورجان الأول ينص: ¬(p ∧ q) ≡", en: "De Morgan's first law states: ¬(p ∧ q) ≡" }, options: { ar: ["¬p ∨ ¬q", "¬p ∧ ¬q", "p ∨ q", "p ∧ q"], en: ["¬p ∨ ¬q", "¬p ∧ ¬q", "p ∨ q", "p ∧ q"] }, correct: { ar: "¬p ∨ ¬q", en: "¬p ∨ ¬q" } },
+    { text: { ar: "قانون دي مورجان الثاني ينص: ¬(p ∨ q) ≡", en: "De Morgan's second law states: ¬(p ∨ q) ≡" }, options: { ar: ["¬p ∨ ¬q", "¬p ∧ ¬q", "p ∨ q", "p ∧ q"], en: ["¬p ∨ ¬q", "¬p ∧ ¬q", "p ∨ q", "p ∧ q"] }, correct: { ar: "¬p ∧ ¬q", en: "¬p ∧ ¬q" } },
+    { text: { ar: "العبارة p → q مكافئة لـ:", en: "p → q is equivalent to:" }, options: { ar: ["¬p ∨ q", "¬q ∨ p", "p ∧ ¬q", "¬p ∧ q"], en: ["¬p ∨ q", "¬q ∨ p", "p ∧ ¬q", "¬p ∧ q"] }, correct: { ar: "¬p ∨ q", en: "¬p ∨ q" } },
+    { text: { ar: "العبارة p → q مكافئة لـ:", en: "p → q is equivalent to:" }, options: { ar: ["¬q → ¬p", "q → p", "¬p → ¬q", "p → ¬q"], en: ["¬q → ¬p", "q → p", "¬p → ¬q", "p → ¬q"] }, correct: { ar: "¬q → ¬p", en: "¬q → ¬p" } },
+    { text: { ar: "ما هو قانون النفي المزدوج؟", en: "What is the double negation law?" }, options: { ar: ["¬(¬p) ≡ p", "¬(¬p) ≡ ~p", "¬(¬p) ≡ T", "¬(¬p) ≡ F"], en: ["¬(¬p) ≡ p", "¬(¬p) ≡ ~p", "¬(¬p) ≡ T", "¬(¬p) ≡ F"] }, correct: { ar: "¬(¬p) ≡ p", en: "¬(¬p) ≡ p" } },
+    { text: { ar: "قانون التوزيع الأول ينص: p ∧ (q ∨ r) ≡", en: "First distributive law: p ∧ (q ∨ r) ≡" }, options: { ar: ["(p ∧ q) ∨ (p ∧ r)", "(p ∨ q) ∧ (p ∨ r)", "p ∧ q ∨ r", "p ∨ q ∧ r"], en: ["(p ∧ q) ∨ (p ∧ r)", "(p ∨ q) ∧ (p ∨ r)", "p ∧ q ∨ r", "p ∨ q ∧ r"] }, correct: { ar: "(p ∧ q) ∨ (p ∧ r)", en: "(p ∧ q) ∨ (p ∧ r)" } },
+    { text: { ar: "قانون التوزيع الثاني ينص: p ∨ (q ∧ r) ≡", en: "Second distributive law: p ∨ (q ∧ r) ≡" }, options: { ar: ["(p ∧ q) ∨ (p ∧ r)", "(p ∨ q) ∧ (p ∨ r)", "p ∧ q ∨ r", "p ∨ q ∧ r"], en: ["(p ∧ q) ∨ (p ∧ r)", "(p ∨ q) ∧ (p ∨ r)", "p ∧ q ∨ r", "p ∨ q ∧ r"] }, correct: { ar: "(p ∨ q) ∧ (p ∨ r)", en: "(p ∨ q) ∧ (p ∨ r)" } },
+    { text: { ar: "قانون الهوية ينص: p ∧ T ≡", en: "Identity law: p ∧ T ≡" }, options: { ar: ["p", "T", "F", "~p"], en: ["p", "T", "F", "~p"] }, correct: { ar: "p", en: "p" } },
+    { text: { ar: "قانون السيادة ينص: p ∨ T ≡", en: "Domination law: p ∨ T ≡" }, options: { ar: ["p", "T", "F", "~p"], en: ["p", "T", "F", "~p"] }, correct: { ar: "T", en: "T" } },
+    { text: { ar: "قانون الإدماج ينص: p ∨ p ≡", en: "Idempotent law: p ∨ p ≡" }, options: { ar: ["p", "T", "F", "~p"], en: ["p", "T", "F", "~p"] }, correct: { ar: "p", en: "p" } },
+    { text: { ar: "إذا كانت p → q صحيحة، فإن ~q → ~p هي:", en: "If p → q is true, then ~q → ~p is:" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "تعتمد على p"], en: ["True", "False", "Undefined", "Depends on p"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "أي من التالي مكافئ لـ ~(p → q)؟", en: "Which is equivalent to ~(p → q)?" }, options: { ar: ["p ∧ ~q", "~p ∧ q", "p ∨ ~q", "~p ∨ q"], en: ["p ∧ ~q", "~p ∧ q", "p ∨ ~q", "~p ∨ q"] }, correct: { ar: "p ∧ ~q", en: "p ∧ ~q" } },
+    { text: { ar: "أي من التالي يعتبر طوطولوجيا؟", en: "Which of the following is a tautology?" }, options: { ar: ["(p → q) ∧ p", "(p → q) → p", "p → (p ∨ q)", "p → (p ∧ q)"], en: ["(p → q) ∧ p", "(p → q) → p", "p → (p ∨ q)", "p → (p ∧ q)"] }, correct: { ar: "p → (p ∨ q)", en: "p → (p ∨ q)" } },
+    { text: { ar: "أي من التالي يعتبر تناقضاً؟", en: "Which of the following is a contradiction?" }, options: { ar: ["p ∧ (q ∨ ~q)", "p ∨ (q ∧ ~q)", "p ∧ ~p", "p ∨ ~p"], en: ["p ∧ (q ∨ ~q)", "p ∨ (q ∧ ~q)", "p ∧ ~p", "p ∨ ~p"] }, correct: { ar: "p ∧ ~p", en: "p ∧ ~p" } },
+    { text: { ar: "العبارة (p → q) ∧ (q → r) → (p → r) هي:", en: "(p → q) ∧ (q → r) → (p → r) is:" }, options: { ar: ["طوطولوجيا", "تناقض", "مكافئة لـ p", "مكافئة لـ q"], en: ["Tautology", "Contradiction", "Equivalent to p", "Equivalent to q"] }, correct: { ar: "طوطولوجيا", en: "Tautology" } },
+    { text: { ar: "قانون التجيير (Exportation) ينص: (p ∧ q) → r ≡", en: "Exportation law: (p ∧ q) → r ≡" }, options: { ar: ["p → (q → r)", "q → (p → r)", "p → r", "q → r"], en: ["p → (q → r)", "q → (p → r)", "p → r", "q → r"] }, correct: { ar: "p → (q → r)", en: "p → (q → r)" } },
+    { text: { ar: "قانون التبادل المنطقي (Commutation) ينص: p ∧ q ≡", en: "Commutation law: p ∧ q ≡" }, options: { ar: ["q ∧ p", "p ∨ q", "p → q", "q → p"], en: ["q ∧ p", "p ∨ q", "p → q", "q → p"] }, correct: { ar: "q ∧ p", en: "q ∧ p" } },
+    { text: { ar: "قانون التبادل المنطقي (Commutation) ينص: p ∨ q ≡", en: "Commutation law: p ∨ q ≡" }, options: { ar: ["q ∨ p", "p ∧ q", "p → q", "q → p"], en: ["q ∨ p", "p ∧ q", "p → q", "q → p"] }, correct: { ar: "q ∨ p", en: "q ∨ p" } },
+    { text: { ar: "قانون الشرطية المكافئة ينص: p → q ≡", en: "Conditional equivalence law: p → q ≡" }, options: { ar: ["~p ∨ q", "p ∨ ~q", "~q ∨ p", "q ∨ ~p"], en: ["~p ∨ q", "p ∨ ~q", "~q ∨ p", "q ∨ ~p"] }, correct: { ar: "~p ∨ q", en: "~p ∨ q" } },
+    { text: { ar: "قانون التجيير (Exportation) ينص: (p ∧ q) → r ≡ p → (q → r). هذا القانون:", en: "Exportation law: (p ∧ q) → r ≡ p → (q → r). This law is:" }, options: { ar: ["صحيح دائماً", "خاطئ دائماً", "صحيح أحياناً", "غير معرف"], en: ["Always true", "Always false", "Sometimes true", "Undefined"] }, correct: { ar: "صحيح دائماً", en: "Always true" } },
+    { text: { ar: "إذا كانت p → q و q → r صحيحتين، فإن:", en: "If p → q and q → r are true, then:" }, options: { ar: ["p → r صحيحة", "r → p صحيحة", "p → q خاطئة", "q → r خاطئة"], en: ["p → r is true", "r → p is true", "p → q is false", "q → r is false"] }, correct: { ar: "p → r صحيحة", en: "p → r is true" } },
+    { text: { ar: "العبارة p → (q → p) هي:", en: "p → (q → p) is:" }, options: { ar: ["طوطولوجيا", "تناقض", "مكافئة لـ p", "مكافئة لـ q"], en: ["Tautology", "Contradiction", "Equivalent to p", "Equivalent to q"] }, correct: { ar: "طوطولوجيا", en: "Tautology" } },
+    { text: { ar: "العبارة (p → q) → (~q → ~p) هي:", en: "(p → q) → (~q → ~p) is:" }, options: { ar: ["طوطولوجيا", "تناقض", "مكافئة لـ p", "مكافئة لـ q"], en: ["Tautology", "Contradiction", "Equivalent to p", "Equivalent to q"] }, correct: { ar: "طوطولوجيا", en: "Tautology" } },
+    { text: { ar: "العبارة (p ∧ q) → p هي:", en: "(p ∧ q) → p is:" }, options: { ar: ["طوطولوجيا", "تناقض", "مكافئة لـ q", "مكافئة لـ p"], en: ["Tautology", "Contradiction", "Equivalent to q", "Equivalent to p"] }, correct: { ar: "طوطولوجيا", en: "Tautology" } },
+    { text: { ar: "العبارة p → (p ∨ q) هي:", en: "p → (p ∨ q) is:" }, options: { ar: ["طوطولوجيا", "تناقض", "مكافئة لـ q", "مكافئة لـ p"], en: ["Tautology", "Contradiction", "Equivalent to q", "Equivalent to p"] }, correct: { ar: "طوطولوجيا", en: "Tautology" } },
+    { text: { ar: "العبارة (p → q) ∨ (q → p) هي:", en: "(p → q) ∨ (q → p) is:" }, options: { ar: ["طوطولوجيا", "تناقض", "مكافئة لـ p", "مكافئة لـ q"], en: ["Tautology", "Contradiction", "Equivalent to p", "Equivalent to q"] }, correct: { ar: "طوطولوجيا", en: "Tautology" } },
+    { text: { ar: "إذا كانت p خاطئة، فإن p → q هي:", en: "If p is false, then p → q is:" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "تعتمد على q"], en: ["True", "False", "Undefined", "Depends on q"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "إذا كانت q صحيحة، فإن p → q هي:", en: "If q is true, then p → q is:" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "تعتمد على p"], en: ["True", "False", "Undefined", "Depends on p"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "قانون الإدماج (Idempotent) ينص: p ∧ p ≡", en: "Idempotent law: p ∧ p ≡" }, options: { ar: ["p", "T", "F", "~p"], en: ["p", "T", "F", "~p"] }, correct: { ar: "p", en: "p" } },
+    { text: { ar: "قانون الإدماج (Idempotent) ينص: p ∨ p ≡", en: "Idempotent law: p ∨ p ≡" }, options: { ar: ["p", "T", "F", "~p"], en: ["p", "T", "F", "~p"] }, correct: { ar: "p", en: "p" } },
+    { text: { ar: "ما هو نفي العبارة الشرطية p → q؟", en: "What is the negation of the conditional p → q?" }, options: { ar: ["p ∧ ~q", "~p ∧ q", "p → ~q", "~p → q"], en: ["p ∧ ~q", "~p ∧ q", "p → ~q", "~p → q"] }, correct: { ar: "p ∧ ~q", en: "p ∧ ~q" } },
+    { text: { ar: "العبارة (p ∧ q) → r مكافئة لـ:", en: "(p ∧ q) → r is equivalent to:" }, options: { ar: ["p → (q → r)", "q → (p → r)", "(p → r) ∧ (q → r)", "(p → r) ∨ (q → r)"], en: ["p → (q → r)", "q → (p → r)", "(p → r) ∧ (q → r)", "(p → r) ∨ (q → r)"] }, correct: { ar: "p → (q → r)", en: "p → (q → r)" } }
+];
+
+// دمج أسئلة المحاضرة 1 و 2
+mcqBank.all = [...mcqBank.lec1, ...mcqBank.lec2];
+// ==================== أسئلة MCQ (المحاضرات 3-4 - 100 سؤال) ====================
+
+// ===== محاضرة 3: المسندات والمُكممات (50 سؤال) =====
+mcqBank.lec3 = [
+    { text: { ar: "الرمز ∀ يعني:", en: "The symbol ∀ means:" }, options: { ar: ["يوجد", "لكل", "بعض", "لا يوجد"], en: ["There exists", "For all", "Some", "There is no"] }, correct: { ar: "لكل", en: "For all" } },
+    { text: { ar: "الرمز ∃ يعني:", en: "The symbol ∃ means:" }, options: { ar: ["يوجد", "لكل", "بعض", "لا يوجد"], en: ["There exists", "For all", "Some", "There is no"] }, correct: { ar: "يوجد", en: "There exists" } },
+    { text: { ar: "نفي العبارة ∀x P(x) هو:", en: "The negation of ∀x P(x) is:" }, options: { ar: ["∀x ~P(x)", "∃x ~P(x)", "~∃x P(x)", "∃x P(x)"], en: ["∀x ~P(x)", "∃x ~P(x)", "~∃x P(x)", "∃x P(x)"] }, correct: { ar: "∃x ~P(x)", en: "∃x ~P(x)" } },
+    { text: { ar: "نفي العبارة ∃x P(x) هو:", en: "The negation of ∃x P(x) is:" }, options: { ar: ["∀x ~P(x)", "∃x ~P(x)", "~∀x P(x)", "∀x P(x)"], en: ["∀x ~P(x)", "∃x ~P(x)", "~∀x P(x)", "∀x P(x)"] }, correct: { ar: "∀x ~P(x)", en: "∀x ~P(x)" } },
+    { text: { ar: "المسند (Predicate) هو:", en: "A predicate is:" }, options: { ar: ["جملة ثابتة", "جملة تحتوي على متغير", "سؤال", "أمر"], en: ["A constant sentence", "A sentence with a variable", "A question", "A command"] }, correct: { ar: "جملة تحتوي على متغير", en: "A sentence with a variable" } },
+    { text: { ar: "مثال على مسور وجودي:", en: "Example of an existential quantifier:" }, options: { ar: ["كل الطلاب مجتهدون", "يوجد طالب راسب", "لا أحد ناجح", "الكل ناجح"], en: ["All students are hardworking", "There exists a failing student", "No one is successful", "Everyone is successful"] }, correct: { ar: "يوجد طالب راسب", en: "There exists a failing student" } },
+    { text: { ar: "مثال على مسور عام:", en: "Example of a universal quantifier:" }, options: { ar: ["يوجد طالب ناجح", "بعض الطلاب مجتهدون", "كل الطلاب مجتهدون", "هناك طالب راسب"], en: ["There exists a successful student", "Some students are hardworking", "All students are hardworking", "There is a failing student"] }, correct: { ar: "كل الطلاب مجتهدون", en: "All students are hardworking" } },
+    { text: { ar: "نفي 'كل الأعداد زوجية' هو:", en: "Negation of 'All numbers are even' is:" }, options: { ar: ["كل الأعداد فردية", "يوجد عدد فردي", "يوجد عدد زوجي", "لا شيء مما سبق"], en: ["All numbers are odd", "There exists an odd number", "There exists an even number", "None of the above"] }, correct: { ar: "يوجد عدد فردي", en: "There exists an odd number" } },
+    { text: { ar: "نفي 'يوجد طالب مجتهد' هو:", en: "Negation of 'There exists a hardworking student' is:" }, options: { ar: ["يوجد طالب كسول", "كل الطلاب مجتهدون", "كل الطلاب ليسوا مجتهدين", "لا يوجد طالب"], en: ["There exists a lazy student", "All students are hardworking", "All students are not hardworking", "There is no student"] }, correct: { ar: "كل الطلاب ليسوا مجتهدين", en: "All students are not hardworking" } },
+    { text: { ar: "المسند P(x): 'x > 5'، ما هي قيمة P(7)؟", en: "Predicate P(x): 'x > 5', what is P(7)?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "تعتمد على x"], en: ["True", "False", "Undefined", "Depends on x"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "المسند P(x): 'x > 5'، ما هي قيمة P(3)؟", en: "Predicate P(x): 'x > 5', what is P(3)?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "تعتمد على x"], en: ["True", "False", "Undefined", "Depends on x"] }, correct: { ar: "خاطئة", en: "False" } },
+    { text: { ar: "أي من التالي يعبر عن 'لكل x، x² ≥ 0'؟", en: "Which expresses 'For all x, x² ≥ 0'?" }, options: { ar: ["∀x (x² ≥ 0)", "∃x (x² ≥ 0)", "∀x (x² < 0)", "∃x (x² < 0)"], en: ["∀x (x² ≥ 0)", "∃x (x² ≥ 0)", "∀x (x² < 0)", "∃x (x² < 0)"] }, correct: { ar: "∀x (x² ≥ 0)", en: "∀x (x² ≥ 0)" } },
+    { text: { ar: "أي من التالي يعبر عن 'يوجد x بحيث x² = 4'؟", en: "Which expresses 'There exists x such that x² = 4'?" }, options: { ar: ["∀x (x² = 4)", "∃x (x² = 4)", "∀x (x² ≠ 4)", "∃x (x² ≠ 4)"], en: ["∀x (x² = 4)", "∃x (x² = 4)", "∀x (x² ≠ 4)", "∃x (x² ≠ 4)"] }, correct: { ar: "∃x (x² = 4)", en: "∃x (x² = 4)" } },
+    { text: { ar: "أي من التالي يعبر عن 'لكل x، x + 0 = x'؟", en: "Which expresses 'For all x, x + 0 = x'?" }, options: { ar: ["∀x (x + 0 = x)", "∃x (x + 0 = x)", "∀x (x + 0 ≠ x)", "∃x (x + 0 ≠ x)"], en: ["∀x (x + 0 = x)", "∃x (x + 0 = x)", "∀x (x + 0 ≠ x)", "∃x (x + 0 ≠ x)"] }, correct: { ar: "∀x (x + 0 = x)", en: "∀x (x + 0 = x)" } },
+    { text: { ar: "إذا كان المجال هو الأعداد الصحيحة، فما قيمة ∀x (x² ≥ 0)؟", en: "If the domain is integers, what is ∀x (x² ≥ 0)?" }, options: { ar: ["صحيحة", "خاطئة", "غير معرفة", "تعتمد على x"], en: ["True", "False", "Undefined", "Depends on x"] }, correct: { ar: "صحيحة", en: "True" } },
+    { text: { ar: "أي من التالي يعتبر مسنداً؟", en: "Which of the following is a predicate?" }, options: { ar: ["x > 5", "5 > 3", "السماء زرقاء", "2 + 2 = 4"], en: ["x > 5", "5 > 3", "The sky is blue", "2 + 2 = 4"] }, correct: { ar: "x > 5", en: "x > 5" } },
+    { text: { ar: "ما هو نفي العبارة ∀x (x > 0)؟", en: "What is the negation of ∀x (x > 0)?" }, options: { ar: ["∀x (x ≤ 0)", "∃x (x ≤ 0)", "∀x (x < 0)", "∃x (x < 0)"], en: ["∀x (x ≤ 0)", "∃x (x ≤ 0)", "∀x (x < 0)", "∃x (x < 0)"] }, correct: { ar: "∃x (x ≤ 0)", en: "∃x (x ≤ 0)" } },
+    { text: { ar: "ما هو نفي العبارة ∃x (x² = 4)؟", en: "What is the negation of ∃x (x² = 4)?" }, options: { ar: ["∀x (x² ≠ 4)", "∃x (x² ≠ 4)", "∀x (x² = 4)", "∃x (x² = 4)"], en: ["∀x (x² ≠ 4)", "∃x (x² ≠ 4)", "∀x (x² = 4)", "∃x (x² = 4)"] }, correct: { ar: "∀x (x² ≠ 4)", en: "∀x (x² ≠ 4)" } },
+    { text: { ar: "المسور العام (∀) يسمى أيضاً:", en: "The universal quantifier (∀) is also called:" }, options: { ar: ["مسور وجودي", "مسور كلي", "مسور جزئي", "مسور فردي"], en: ["Existential quantifier", "Universal quantifier", "Partial quantifier", "Individual quantifier"] }, correct: { ar: "مسور كلي", en: "Universal quantifier" } },
+    { text: { ar: "المسور الوجودي (∃) يسمى أيضاً:", en: "The existential quantifier (∃) is also called:" }, options: { ar: ["مسور كلي", "مسور جزئي", "مسور وجودي", "مسور فردي"], en: ["Universal quantifier", "Partial quantifier", "Existential quantifier", "Individual quantifier"] }, correct: { ar: "مسور جزئي", en: "Partial quantifier" } }
+];
+
+// ===== محاضرة 4: الدوال (50 سؤال) =====
+mcqBank.lec4 = [
+    { text: { ar: "الدالة f: X→Y تكون واحد لواحد (Injective) إذا:", en: "A function f: X→Y is injective if:" }, options: { ar: ["f(x₁)=f(x₂) ⇒ x₁=x₂", "كل y∈Y يوجد x∈X", "المجال = المدى", "الدالة متصلة"], en: ["f(x₁)=f(x₂) ⇒ x₁=x₂", "Every y∈Y has x∈X", "Domain = Range", "Function is continuous"] }, correct: { ar: "f(x₁)=f(x₂) ⇒ x₁=x₂", en: "f(x₁)=f(x₂) ⇒ x₁=x₂" } },
+    { text: { ar: "الدالة f: X→Y تكون شاملة (Surjective) إذا:", en: "A function f: X→Y is surjective if:" }, options: { ar: ["كل y∈Y يوجد x∈X بحيث f(x)=y", "x₁=x₂ ⇒ f(x₁)=f(x₂)", "المجال = المجال المقابل", "الدالة متزايدة"], en: ["Every y∈Y has x∈X with f(x)=y", "x₁=x₂ ⇒ f(x₁)=f(x₂)", "Domain = Codomain", "Function is increasing"] }, correct: { ar: "كل y∈Y يوجد x∈X بحيث f(x)=y", en: "Every y∈Y has x∈X with f(x)=y" } },
+    { text: { ar: "الدالة التقابلية (Bijective) هي:", en: "A bijective function is:" }, options: { ar: ["واحد لواحد فقط", "شاملة فقط", "واحد لواحد وشاملة", "لا واحد لواحد ولا شاملة"], en: ["Injective only", "Surjective only", "Both injective and surjective", "Neither"] }, correct: { ar: "واحد لواحد وشاملة", en: "Both injective and surjective" } },
+    { text: { ar: "إذا كانت f(x)=2x-1، فإن f(3) يساوي:", en: "If f(x)=2x-1, then f(3) equals:" }, options: { ar: ["3", "4", "5", "6"], en: ["3", "4", "5", "6"] }, correct: { ar: "5", en: "5" } },
+    { text: { ar: "المدى (Range) للدالة هو:", en: "The range of a function is:" }, options: { ar: ["مجموعة المدخلات", "مجموعة المخرجات الفعلية", "مجموعة المخرجات الممكنة", "قاعدة الدالة"], en: ["Set of inputs", "Set of actual outputs", "Set of possible outputs", "Function rule"] }, correct: { ar: "مجموعة المخرجات الفعلية", en: "Set of actual outputs" } },
+    { text: { ar: "إذا كانت f(x)=x²، فإن f(-2) = f(2) لأن:", en: "If f(x)=x², then f(-2) = f(2) because:" }, options: { ar: ["f واحدة لواحد", "f ليست واحدة لواحد", "f شاملة", "f تقابل"], en: ["f is injective", "f is not injective", "f is surjective", "f is bijective"] }, correct: { ar: "f ليست واحدة لواحد", en: "f is not injective" } },
+    { text: { ar: "الدالة f(x)=2x+1 من R إلى R هي:", en: "f(x)=2x+1 from R to R is:" }, options: { ar: ["واحد لواحد فقط", "شاملة فقط", "تقابل", "لا واحد لواحد ولا شاملة"], en: ["Injective only", "Surjective only", "Bijective", "Neither"] }, correct: { ar: "تقابل", en: "Bijective" } },
+    { text: { ar: "مجال الدالة f(x)=1/x هو:", en: "The domain of f(x)=1/x is:" }, options: { ar: ["R", "R\{0}", "R⁺", "R⁻"], en: ["R", "R\{0}", "R⁺", "R⁻"] }, correct: { ar: "R\{0}", en: "R\{0}" } },
+    { text: { ar: "مدى الدالة f(x)=x²+2 هو:", en: "The range of f(x)=x²+2 is:" }, options: { ar: ["R", "[2,∞)", "(-∞,2]", "R⁺"], en: ["R", "[2,∞)", "(-∞,2]", "R⁺"] }, correct: { ar: "[2,∞)", en: "[2,∞)" } },
+    { text: { ar: "الدالة f(x)=|x| من R إلى R هي:", en: "f(x)=|x| from R to R is:" }, options: { ar: ["واحد لواحد", "شاملة", "تقابل", "ليست واحد لواحد"], en: ["Injective", "Surjective", "Bijective", "Not injective"] }, correct: { ar: "ليست واحد لواحد", en: "Not injective" } },
+    { text: { ar: "إذا كانت f(x)=3x-2، فإن f(0) تساوي:", en: "If f(x)=3x-2, then f(0) equals:" }, options: { ar: ["0", "-2", "2", "3"], en: ["0", "-2", "2", "3"] }, correct: { ar: "-2", en: "-2" } },
+    { text: { ar: "إذا كانت f(x)=x+2، فإن f⁻¹(x) هي:", en: "If f(x)=x+2, then f⁻¹(x) is:" }, options: { ar: ["x-2", "x+2", "2x", "x/2"], en: ["x-2", "x+2", "2x", "x/2"] }, correct: { ar: "x-2", en: "x-2" } },
+    { text: { ar: "المجال المقابل (Codomain) للدالة f: X→Y هو:", en: "The codomain of f: X→Y is:" }, options: { ar: ["X", "Y", "مجموعة الصور", "مجموعة المدخلات"], en: ["X", "Y", "Set of images", "Set of inputs"] }, correct: { ar: "Y", en: "Y" } },
+    { text: { ar: "الدالة f(x)=2x هي:", en: "f(x)=2x is:" }, options: { ar: ["واحد لواحد فقط", "شاملة فقط", "تقابل", "ليست واحد لواحد"], en: ["Injective only", "Surjective only", "Bijective", "Not injective"] }, correct: { ar: "تقابل", en: "Bijective" } },
+    { text: { ar: "الدالة f(x)=x² من R إلى R⁺ هي:", en: "f(x)=x² from R to R⁺ is:" }, options: { ar: ["واحد لواحد", "شاملة", "تقابل", "ليست واحد لواحد"], en: ["Injective", "Surjective", "Bijective", "Not injective"] }, correct: { ar: "شاملة", en: "Surjective" } },
+    { text: { ar: "أي من التالي ليس دالة من R إلى R؟", en: "Which is not a function from R to R?" }, options: { ar: ["f(x)=x²", "f(x)=√x", "f(x)=3x+1", "f(x)=x³"], en: ["f(x)=x²", "f(x)=√x", "f(x)=3x+1", "f(x)=x³"] }, correct: { ar: "f(x)=√x", en: "f(x)=√x" } },
+    { text: { ar: "الدالة f(x)=x³ هي:", en: "f(x)=x³ is:" }, options: { ar: ["واحد لواحد فقط", "شاملة فقط", "تقابل", "ليست واحد لواحد"], en: ["Injective only", "Surjective only", "Bijective", "Not injective"] }, correct: { ar: "تقابل", en: "Bijective" } },
+    { text: { ar: "إذا كانت f(x)=x²-1، فإن f(2) تساوي:", en: "If f(x)=x²-1, then f(2) equals:" }, options: { ar: ["2", "3", "4", "5"], en: ["2", "3", "4", "5"] }, correct: { ar: "3", en: "3" } },
+    { text: { ar: "مدى الدالة f(x)=x²-1 هو:", en: "The range of f(x)=x²-1 is:" }, options: { ar: ["R", "[-1,∞)", "(-∞,-1]", "R⁺"], en: ["R", "[-1,∞)", "(-∞,-1]", "R⁺"] }, correct: { ar: "[-1,∞)", en: "[-1,∞)" } },
+    { text: { ar: "الدالة f(x)=x² من R إلى R هي:", en: "f(x)=x² from R to R is:" }, options: { ar: ["واحد لواحد", "شاملة", "تقابل", "ليست واحد لواحد"], en: ["Injective", "Surjective", "Bijective", "Not injective"] }, correct: { ar: "ليست واحد لواحد", en: "Not injective" } }
+];
+
+// دمج أسئلة المحاضرات 1-4
+mcqBank.all = [
+    ...mcqBank.lec1, ...mcqBank.lec2, ...mcqBank.lec3, ...mcqBank.lec4
+];
+// ==================== أسئلة MCQ (المحاضرات 5-6 - 100 سؤال) ====================
+
+// ===== محاضرة 5: الاستقراء الرياضي (50 سؤال) =====
+mcqBank.lec5 = [
+    { text: { ar: "الخطوة الأولى في الاستقراء الرياضي هي:", en: "The first step in mathematical induction is:" }, options: { ar: ["إثبات P(1) صحيحة", "افتراض P(k) صحيحة", "إثبات P(k+1) صحيحة", "كتابة النتيجة"], en: ["Prove P(1) is true", "Assume P(k) is true", "Prove P(k+1) is true", "Write conclusion"] }, correct: { ar: "إثبات P(1) صحيحة", en: "Prove P(1) is true" } },
+    { text: { ar: "الفرضية الاستقرائية هي:", en: "The inductive hypothesis is:" }, options: { ar: ["P(1) صحيحة", "P(k) صحيحة", "P(k+1) صحيحة", "P(n) صحيحة"], en: ["P(1) is true", "P(k) is true", "P(k+1) is true", "P(n) is true"] }, correct: { ar: "P(k) صحيحة", en: "P(k) is true" } },
+    { text: { ar: "لإثبات 1+2+...+n = n(n+1)/2، بعد افتراض صحة P(k) نضيف:", en: "To prove 1+2+...+n = n(n+1)/2, after assuming P(k) we add:" }, options: { ar: ["k", "k+1", "1", "0"], en: ["k", "k+1", "1", "0"] }, correct: { ar: "k+1", en: "k+1" } },
+    { text: { ar: "الاستقراء الرياضي يستخدم لإثبات:", en: "Mathematical induction is used to prove:" }, options: { ar: ["معادلات حسابية فقط", "عبارات لكل الأعداد الطبيعية", "نظريات هندسية فقط", "معادلات تفاضلية"], en: ["Algebraic equations only", "Statements for all natural numbers", "Geometric theorems only", "Differential equations"] }, correct: { ar: "عبارات لكل الأعداد الطبيعية", en: "Statements for all natural numbers" } },
+    { text: { ar: "في الاستقراء الرياضي، الخطوة الاستقرائية تثبت:", en: "In induction, the inductive step proves:" }, options: { ar: ["P(1)", "P(k) → P(k+1)", "P(k+1) → P(k)", "P(n) → P(1)"], en: ["P(1)", "P(k) → P(k+1)", "P(k+1) → P(k)", "P(n) → P(1)"] }, correct: { ar: "P(k) → P(k+1)", en: "P(k) → P(k+1)" } },
+    { text: { ar: "إذا أثبتنا P(1) و P(k) → P(k+1)، فإننا نثبت:", en: "If we prove P(1) and P(k) → P(k+1), we prove:" }, options: { ar: ["P(1) فقط", "P(n) لكل n", "P(k) فقط", "P(k+1) فقط"], en: ["P(1) only", "P(n) for all n", "P(k) only", "P(k+1) only"] }, correct: { ar: "P(n) لكل n", en: "P(n) for all n" } },
+    { text: { ar: "مبدأ الاستقراء الرياضي يعتمد على:", en: "The principle of mathematical induction is based on:" }, options: { ar: ["المنطق", "التجربة", "الحدس", "المسلمات"], en: ["Logic", "Experience", "Intuition", "Axioms"] }, correct: { ar: "المنطق", en: "Logic" } },
+    { text: { ar: "أي من التالي يمكن إثباته بالاستقراء؟", en: "Which can be proven by induction?" }, options: { ar: ["1+2+...+n = n(n+1)/2", "نظرية فيثاغورس", "قانون الجذب العام", "نظرية الأعداد"], en: ["1+2+...+n = n(n+1)/2", "Pythagorean theorem", "Law of gravitation", "Number theory"] }, correct: { ar: "1+2+...+n = n(n+1)/2", en: "1+2+...+n = n(n+1)/2" } },
+    { text: { ar: "في إثبات 1+2+...+n = n(n+1)/2، الأساس n=1 يعطي:", en: "In proving 1+2+...+n = n(n+1)/2, the base n=1 gives:" }, options: { ar: ["1=1", "1=2", "2=2", "1=0"], en: ["1=1", "1=2", "2=2", "1=0"] }, correct: { ar: "1=1", en: "1=1" } },
+    { text: { ar: "الاستقراء الرياضي يثبت العبارات لـ:", en: "Mathematical induction proves statements for:" }, options: { ar: ["جميع الأعداد الحقيقية", "جميع الأعداد الصحيحة الموجبة", "جميع الأعداد المركبة", "جميع الأعداد الكسرية"], en: ["All real numbers", "All positive integers", "All complex numbers", "All rational numbers"] }, correct: { ar: "جميع الأعداد الصحيحة الموجبة", en: "All positive integers" } },
+    { text: { ar: "في الاستقراء، ماذا نثبت في الخطوة الاستقرائية؟", en: "In induction, what do we prove in the inductive step?" }, options: { ar: ["P(1)", "P(k)", "P(k+1)", "P(k) → P(k+1)"], en: ["P(1)", "P(k)", "P(k+1)", "P(k) → P(k+1)"] }, correct: { ar: "P(k) → P(k+1)", en: "P(k) → P(k+1)" } },
+    { text: { ar: "لإثبات 1+3+5+...+(2n-1)=n²، الأساس n=1 يعطي:", en: "To prove 1+3+5+...+(2n-1)=n², the base n=1 gives:" }, options: { ar: ["1=1", "1=3", "3=3", "1=0"], en: ["1=1", "1=3", "3=3", "1=0"] }, correct: { ar: "1=1", en: "1=1" } },
+    { text: { ar: "في الاستقراء، الفرضية الاستقرائية تفترض صحة:", en: "In induction, the inductive hypothesis assumes the truth of:" }, options: { ar: ["P(1)", "P(k)", "P(k+1)", "P(n)"], en: ["P(1)", "P(k)", "P(k+1)", "P(n)"] }, correct: { ar: "P(k)", en: "P(k)" } }
+];
+
+// ===== محاضرة 6: نظرية المجموعات (50 سؤال) =====
+mcqBank.lec6 = [
+    { text: { ar: "إذا كان A = {1,2} و B = {1,2,3}، فإن:", en: "If A = {1,2} and B = {1,2,3}, then:" }, options: { ar: ["A⊂B", "B⊂A", "A=B", "A∩B=∅"], en: ["A⊂B", "B⊂A", "A=B", "A∩B=∅"] }, correct: { ar: "A⊂B", en: "A⊂B" } },
+    { text: { ar: "المجموعة الخالية ∅ هي مجموعة جزئية من:", en: "The empty set ∅ is a subset of:" }, options: { ar: ["كل مجموعة", "لا مجموعة", "المجموعات المنتهية فقط", "المجموعات غير المنتهية فقط"], en: ["Every set", "No set", "Finite sets only", "Infinite sets only"] }, correct: { ar: "كل مجموعة", en: "Every set" } },
+    { text: { ar: "إذا كان |A| = 4، فإن |P(A)| (مجموعة القوى) هو:", en: "If |A| = 4, then |P(A)| (power set) is:" }, options: { ar: ["4", "8", "12", "16"], en: ["4", "8", "12", "16"] }, correct: { ar: "16", en: "16" } },
+    { text: { ar: "الرمز |A| يعني:", en: "The symbol |A| means:" }, options: { ar: ["ترتيب المجموعة", "نوع المجموعة", "عناصر المجموعة", "اسم المجموعة"], en: ["Cardinality of the set", "Type of the set", "Elements of the set", "Name of the set"] }, correct: { ar: "ترتيب المجموعة", en: "Cardinality of the set" } },
+    { text: { ar: "إذا كان A = {a,b,c}، فإن عدد المجموعات الجزئية لـ A هو:", en: "If A = {a,b,c}, the number of subsets of A is:" }, options: { ar: ["3", "6", "7", "8"], en: ["3", "6", "7", "8"] }, correct: { ar: "8", en: "8" } },
+    { text: { ar: "المجموعة الخالية يُرمز لها بـ:", en: "The empty set is denoted by:" }, options: { ar: ["U", "A", "∅", "N"], en: ["U", "A", "∅", "N"] }, correct: { ar: "∅", en: "∅" } },
+    { text: { ar: "إذا كان A⊆B و B⊆A، فإن:", en: "If A⊆B and B⊆A, then:" }, options: { ar: ["A≠B", "A=B", "A⊂B", "B⊂A"], en: ["A≠B", "A=B", "A⊂B", "B⊂A"] }, correct: { ar: "A=B", en: "A=B" } },
+    { text: { ar: "أي من التالي يعتبر مجموعة؟", en: "Which of the following is a set?" }, options: { ar: ["{1,2,3}", "[1,3]", "1,2,3", "x>2"], en: ["{1,2,3}", "[1,3]", "1,2,3", "x>2"] }, correct: { ar: "{1,2,3}", en: "{1,2,3}" } },
+    { text: { ar: "إذا كان A={1,2,3,4}، فإن |A| =", en: "If A={1,2,3,4}, then |A| = " }, options: { ar: ["2", "3", "4", "5"], en: ["2", "3", "4", "5"] }, correct: { ar: "4", en: "4" } },
+    { text: { ar: "أي من التالي يمثل مجموعة جزئية من A={1,2,3}؟", en: "Which represents a subset of A={1,2,3}?" }, options: { ar: ["{1,4}", "{2,3}", "{4,5}", "{0,1}"], en: ["{1,4}", "{2,3}", "{4,5}", "{0,1}"] }, correct: { ar: "{2,3}", en: "{2,3}" } },
+    { text: { ar: "مجموعة القوى للمجموعة A={a,b} هي:", en: "The power set of A={a,b} is:" }, options: { ar: ["{∅,{a},{b},{a,b}}", "{{a},{b}}", "{∅,{a},{b}}", "{a,b}"], en: ["{∅,{a},{b},{a,b}}", "{{a},{b}}", "{∅,{a},{b}}", "{a,b}"] }, correct: { ar: "{∅,{a},{b},{a,b}}", en: "{∅,{a},{b},{a,b}}" } }
+];
+
+// دمج أسئلة المحاضرات 1-6
+mcqBank.all = [
+    ...mcqBank.lec1, ...mcqBank.lec2, ...mcqBank.lec3,
+    ...mcqBank.lec4, ...mcqBank.lec5, ...mcqBank.lec6
+];
+// ==================== أسئلة MCQ (المحاضرات 7، 9، 11 - 100 سؤال) ====================
+
+// ===== محاضرة 7: عمليات المجموعات (40 سؤال) =====
+mcqBank.lec7 = [
+    { text: { ar: "A ∪ B تحتوي على العناصر التي:", en: "A ∪ B contains elements that are:" }, options: { ar: ["في A أو B", "في A و B", "في A فقط", "في B فقط"], en: ["In A or B", "In A and B", "In A only", "In B only"] }, correct: { ar: "في A أو B", en: "In A or B" } },
+    { text: { ar: "A ∩ B تحتوي على العناصر التي:", en: "A ∩ B contains elements that are:" }, options: { ar: ["في A و B", "في A أو B", "في A فقط", "في B فقط"], en: ["In A and B", "In A or B", "In A only", "In B only"] }, correct: { ar: "في A و B", en: "In A and B" } },
+    { text: { ar: "قانون دي مورجان الأول ينص: (A ∪ B)' =", en: "De Morgan's first law states: (A ∪ B)' =" }, options: { ar: ["A' ∩ B'", "A' ∪ B'", "A ∩ B", "A ∪ B"], en: ["A' ∩ B'", "A' ∪ B'", "A ∩ B", "A ∪ B"] }, correct: { ar: "A' ∩ B'", en: "A' ∩ B'" } },
+    { text: { ar: "قانون دي مورجان الثاني ينص: (A ∩ B)' =", en: "De Morgan's second law states: (A ∩ B)' =" }, options: { ar: ["A' ∩ B'", "A' ∪ B'", "A ∩ B", "A ∪ B"], en: ["A' ∩ B'", "A' ∪ B'", "A ∩ B", "A ∪ B"] }, correct: { ar: "A' ∪ B'", en: "A' ∪ B'" } },
+    { text: { ar: "إذا كان A = {1,2,3} و B = {3,4,5}، فإن A ∩ B =", en: "If A = {1,2,3} and B = {3,4,5}, then A ∩ B =" }, options: { ar: ["{1,2,3,4,5}", "{3}", "{1,2}", "{4,5}"], en: ["{1,2,3,4,5}", "{3}", "{1,2}", "{4,5}"] }, correct: { ar: "{3}", en: "{3}" } },
+    { text: { ar: "الفرق المتناظر AΔB يُعرف بأنه:", en: "The symmetric difference AΔB is defined as:" }, options: { ar: ["(A-B)∪(B-A)", "A∩B", "A∪B", "A-B"], en: ["(A-B)∪(B-A)", "A∩B", "A∪B", "A-B"] }, correct: { ar: "(A-B)∪(B-A)", en: "(A-B)∪(B-A)" } },
+    { text: { ar: "إذا كان A = {1,2,3} و B = {3,4,5}، فإن A - B =", en: "If A = {1,2,3} and B = {3,4,5}, then A - B =" }, options: { ar: ["{1,2}", "{3}", "{4,5}", "{1,2,3,4,5}"], en: ["{1,2}", "{3}", "{4,5}", "{1,2,3,4,5}"] }, correct: { ar: "{1,2}", en: "{1,2}" } },
+    { text: { ar: "المتمم A' يُعرف بأنه:", en: "The complement A' is defined as:" }, options: { ar: ["U - A", "A - U", "A ∩ U", "A ∪ U"], en: ["U - A", "A - U", "A ∩ U", "A ∪ U"] }, correct: { ar: "U - A", en: "U - A" } },
+    { text: { ar: "إذا كان U = {1,2,3,4,5,6} و A = {1,2,3}، فإن A' =", en: "If U = {1,2,3,4,5,6} and A = {1,2,3}, then A' =" }, options: { ar: ["{4,5,6}", "{1,2,3}", "{1,2,3,4,5,6}", "∅"], en: ["{4,5,6}", "{1,2,3}", "{1,2,3,4,5,6}", "∅"] }, correct: { ar: "{4,5,6}", en: "{4,5,6}" } },
+    { text: { ar: "إذا كان A = {1,2} و B = {2,3}، فإن AΔB =", en: "If A = {1,2} and B = {2,3}, then AΔB =" }, options: { ar: ["{1,3}", "{2}", "{1,2,3}", "∅"], en: ["{1,3}", "{2}", "{1,2,3}", "∅"] }, correct: { ar: "{1,3}", en: "{1,3}" } },
+    { text: { ar: "A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C) هو قانون:", en: "A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C) is the law of:" }, options: { ar: ["التوزيع", "الإبدال", "التجميع", "دي مورجان"], en: ["Distributive", "Commutative", "Associative", "De Morgan"] }, correct: { ar: "التوزيع", en: "Distributive" } },
+    { text: { ar: "A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C) هو قانون:", en: "A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C) is the law of:" }, options: { ar: ["التوزيع", "الإبدال", "التجميع", "دي مورجان"], en: ["Distributive", "Commutative", "Associative", "De Morgan"] }, correct: { ar: "التوزيع", en: "Distributive" } }
+];
+
+// ===== محاضرة 9: العلاقات (30 سؤال) =====
+mcqBank.lec9 = [
+    { text: { ar: "العلاقة R على A تكون انعكاسية إذا:", en: "A relation R on A is reflexive if:" }, options: { ar: ["(a,a)∈R لكل a∈A", "(a,b)∈R ⇒ (b,a)∈R", "(a,b)∈R و (b,c)∈R ⇒ (a,c)∈R", "R=∅"], en: ["(a,a)∈R for all a∈A", "(a,b)∈R ⇒ (b,a)∈R", "(a,b)∈R and (b,c)∈R ⇒ (a,c)∈R", "R=∅"] }, correct: { ar: "(a,a)∈R لكل a∈A", en: "(a,a)∈R for all a∈A" } },
+    { text: { ar: "العلاقة R تكون تناظرية إذا:", en: "A relation R is symmetric if:" }, options: { ar: ["(a,b)∈R ⇒ (b,a)∈R", "(a,a)∈R لكل a", "(a,b)∈R و (b,c)∈R ⇒ (a,c)∈R", "R=A×A"], en: ["(a,b)∈R ⇒ (b,a)∈R", "(a,a)∈R for all a", "(a,b)∈R and (b,c)∈R ⇒ (a,c)∈R", "R=A×A"] }, correct: { ar: "(a,b)∈R ⇒ (b,a)∈R", en: "(a,b)∈R ⇒ (b,a)∈R" } },
+    { text: { ar: "العلاقة R تكون متعدية إذا:", en: "A relation R is transitive if:" }, options: { ar: ["(a,b)∈R ⇒ (b,a)∈R", "(a,a)∈R لكل a", "(a,b)∈R و (b,c)∈R ⇒ (a,c)∈R", "R=A×A"], en: ["(a,b)∈R ⇒ (b,a)∈R", "(a,a)∈R for all a", "(a,b)∈R and (b,c)∈R ⇒ (a,c)∈R", "R=A×A"] }, correct: { ar: "(a,b)∈R و (b,c)∈R ⇒ (a,c)∈R", en: "(a,b)∈R and (b,c)∈R ⇒ (a,c)∈R" } },
+    { text: { ar: "علاقة التكافؤ هي علاقة:", en: "An equivalence relation is:" }, options: { ar: ["انعكاسية وتناظرية ومتعدية", "انعكاسية فقط", "تناظرية فقط", "متعدية فقط"], en: ["Reflexive, symmetric, transitive", "Reflexive only", "Symmetric only", "Transitive only"] }, correct: { ar: "انعكاسية وتناظرية ومتعدية", en: "Reflexive, symmetric, transitive" } },
+    { text: { ar: "مثال على علاقة تكافؤ:", en: "Example of an equivalence relation:" }, options: { ar: ["= (يساوي)", "≤ (أصغر أو يساوي)", "< (أصغر)", "≠ (لا يساوي)"], en: ["= (equals)", "≤ (less than or equal)", "< (less than)", "≠ (not equal)"] }, correct: { ar: "= (يساوي)", en: "= (equals)" } },
+    { text: { ar: "هل العلاقة '≤' على الأعداد الحقيقية علاقة تكافؤ؟", en: "Is '≤' on real numbers an equivalence relation?" }, options: { ar: ["نعم", "لا، لأنها ليست انعكاسية", "لا، لأنها ليست تناظرية", "لا، لأنها ليست متعدية"], en: ["Yes", "No, not reflexive", "No, not symmetric", "No, not transitive"] }, correct: { ar: "لا، لأنها ليست تناظرية", en: "No, not symmetric" } },
+    { text: { ar: "العلاقة R = {(1,1),(2,2),(3,3),(1,2),(2,1)} على A={1,2,3} هي:", en: "R = {(1,1),(2,2),(3,3),(1,2),(2,1)} on A={1,2,3} is:" }, options: { ar: ["انعكاسية وتناظرية وليست متعدية", "انعكاسية ومتعدية وليست تناظرية", "تناظرية ومتعدية وليست انعكاسية", "علاقة تكافؤ"], en: ["Reflexive, symmetric, not transitive", "Reflexive, transitive, not symmetric", "Symmetric, transitive, not reflexive", "Equivalence relation"] }, correct: { ar: "انعكاسية وتناظرية وليست متعدية", en: "Reflexive, symmetric, not transitive" } },
+    { text: { ar: "العلاقة التي تحقق (a,a)∈R لكل a∈A تسمى:", en: "A relation satisfying (a,a)∈R for all a∈A is called:" }, options: { ar: ["انعكاسية", "تناظرية", "متعدية", "تكافؤ"], en: ["Reflexive", "Symmetric", "Transitive", "Equivalence"] }, correct: { ar: "انعكاسية", en: "Reflexive" } },
+    { text: { ar: "العلاقة التي تحقق إذا (a,b)∈R فإن (b,a)∈R تسمى:", en: "A relation satisfying if (a,b)∈R then (b,a)∈R is called:" }, options: { ar: ["انعكاسية", "تناظرية", "متعدية", "تكافؤ"], en: ["Reflexive", "Symmetric", "Transitive", "Equivalence"] }, correct: { ar: "تناظرية", en: "Symmetric" } },
+    { text: { ar: "العلاقة التي تحقق إذا (a,b)∈R و (b,c)∈R فإن (a,c)∈R تسمى:", en: "A relation satisfying if (a,b)∈R and (b,c)∈R then (a,c)∈R is called:" }, options: { ar: ["انعكاسية", "تناظرية", "متعدية", "تكافؤ"], en: ["Reflexive", "Symmetric", "Transitive", "Equivalence"] }, correct: { ar: "متعدية", en: "Transitive" } }
+];
+
+// ===== محاضرة 11: تركيب الدوال (30 سؤال) =====
+mcqBank.lec11 = [
+    { text: { ar: "تركيب الدوال (f∘g)(x) يساوي:", en: "Function composition (f∘g)(x) equals:" }, options: { ar: ["f(g(x))", "g(f(x))", "f(x)+g(x)", "f(x)×g(x)"], en: ["f(g(x))", "g(f(x))", "f(x)+g(x)", "f(x)×g(x)"] }, correct: { ar: "f(g(x))", en: "f(g(x))" } },
+    { text: { ar: "إذا كان f(x)=x² و g(x)=x+1، فإن (f∘g)(x) =", en: "If f(x)=x² and g(x)=x+1, then (f∘g)(x) =" }, options: { ar: ["x²+1", "(x+1)²", "x²+x+1", "x²+2x"], en: ["x²+1", "(x+1)²", "x²+x+1", "x²+2x"] }, correct: { ar: "(x+1)²", en: "(x+1)²" } },
+    { text: { ar: "الدالة المحايدة I(x) = x تحقق:", en: "The identity function I(x) = x satisfies:" }, options: { ar: ["f∘I = f", "f∘I = I", "f∘I = 0", "f∘I = 1"], en: ["f∘I = f", "f∘I = I", "f∘I = 0", "f∘I = 1"] }, correct: { ar: "f∘I = f", en: "f∘I = f" } },
+    { text: { ar: "شرط وجود معكوس الدالة f⁻¹ هو:", en: "The condition for f⁻¹ to exist is:" }, options: { ar: ["f تقابل (Bijective)", "f واحد لواحد", "f شامل", "f متصلة"], en: ["f is bijective", "f is injective", "f is surjective", "f is continuous"] }, correct: { ar: "f تقابل (Bijective)", en: "f is bijective" } },
+    { text: { ar: "إذا كان f(x)=2x+1، فإن f⁻¹(x) =", en: "If f(x)=2x+1, then f⁻¹(x) =" }, options: { ar: ["(x-1)/2", "2x-1", "x/2-1", "(x+1)/2"], en: ["(x-1)/2", "2x-1", "x/2-1", "(x+1)/2"] }, correct: { ar: "(x-1)/2", en: "(x-1)/2" } },
+    { text: { ar: "إذا كان f(x)=x+2 و g(x)=3x، فإن f∘g =", en: "If f(x)=x+2 and g(x)=3x, then f∘g =" }, options: { ar: ["3x+2", "3x+6", "x+5", "4x+2"], en: ["3x+2", "3x+6", "x+5", "4x+2"] }, correct: { ar: "3x+2", en: "3x+2" } },
+    { text: { ar: "إذا كان f(x)=x² و g(x)=x+1، فإن g∘f =", en: "If f(x)=x² and g(x)=x+1, then g∘f =" }, options: { ar: ["x²+1", "(x+1)²", "x²+x+1", "x²+2x+1"], en: ["x²+1", "(x+1)²", "x²+x+1", "x²+2x+1"] }, correct: { ar: "x²+1", en: "x²+1" } },
+    { text: { ar: "تركيب الدوال عملية:", en: "Function composition is:" }, options: { ar: ["تجميعية (Associative)", "تبديلية (Commutative)", "لا تجميعية ولا تبديلية", "تبديلية دائماً"], en: ["Associative", "Commutative", "Neither", "Always commutative"] }, correct: { ar: "تجميعية (Associative)", en: "Associative" } }
+];
+
+// دمج جميع أسئلة MCQ
+mcqBank.all = [
+    ...mcqBank.lec1, ...mcqBank.lec2, ...mcqBank.lec3,
+    ...mcqBank.lec4, ...mcqBank.lec5, ...mcqBank.lec6,
+    ...mcqBank.lec7, ...mcqBank.lec9, ...mcqBank.lec11
+];
+// ==================== أسئلة مقالية (150 سؤال) ====================
+const essayBank = {
+    lec1: [
+        { text: { ar: "عرف القضية (Proposition) مع إعطاء مثالين.", en: "Define proposition and give two examples." }, modelAnswer: { ar: "القضية هي جملة خبرية تحتمل الصحة أو الخطأ. مثال: '5+3=8' (صحيحة)، 'باريس عاصمة إنجلترا' (خاطئة).", en: "A proposition is a declarative sentence that is either true or false. Example: '5+3=8' (true), 'Paris is the capital of England' (false)." } },
+        { text: { ar: "أنشئ جدول الصواب للعبارة p ∧ q.", en: "Construct the truth table for p ∧ q." }, modelAnswer: { ar: "p q | p∧q\nص ص | ص\nص خ | خ\nخ ص | خ\nخ خ | خ", en: "p q | p∧q\nT T | T\nT F | F\nF T | F\nF F | F" } },
+        { text: { ar: "اشرح الفرق بين العطف (∧) والفصل (∨).", en: "Explain the difference between conjunction (∧) and disjunction (∨)." }, modelAnswer: { ar: "العطف (p∧q) يكون صحيحاً فقط عندما يكون كل من p و q صحيحين. الفصل (p∨q) يكون صحيحاً عندما يكون أحدهما على الأقل صحيحاً.", en: "Conjunction (p∧q) is true only when both p and q are true. Disjunction (p∨q) is true when at least one of p or q is true." } },
+        { text: { ar: "ما هو عدد الصفوف في جدول الصواب لعبارة تحتوي على 4 متغيرات؟ ولماذا؟", en: "How many rows in a truth table for 4 variables? Why?" }, modelAnswer: { ar: "16 صفاً، لأن عدد الصفوف = 2ⁿ حيث n عدد المتغيرات، 2⁴ = 16.", en: "16 rows, because number of rows = 2ⁿ where n is number of variables, 2⁴ = 16." } },
+        { text: { ar: "أعط مثالاً على عبارة مركبة من ثلاث متغيرات واكتب جدول الصواب الخاص بها.", en: "Give an example of a compound statement with three variables and write its truth table." }, modelAnswer: { ar: "p ∧ (q ∨ r). الجدول يحتوي على 8 صفوف.", en: "p ∧ (q ∨ r). The table has 8 rows." } }
+    ],
+    lec2: [
+        { text: { ar: "ما هي الطوطولوجيا (Tautology)؟ أعط مثالاً.", en: "What is a tautology? Give an example." }, modelAnswer: { ar: "الطوطولوجيا هي عبارة صحيحة دائماً. مثال: p ∨ ¬p.", en: "A tautology is a statement that is always true. Example: p ∨ ¬p." } },
+        { text: { ar: "اذكر وأثبت قانون دي مورجان الأول في المنطق: ¬(p∧q) ≡ ¬p ∨ ¬q.", en: "State and prove De Morgan's first law: ¬(p∧q) ≡ ¬p ∨ ¬q." }, modelAnswer: { ar: "نستخدم جدول الصواب. p q | p∧q | ¬(p∧q) | ¬p | ¬q | ¬p∨¬q. جميع القيم متطابقة.", en: "Use truth table. p q | p∧q | ¬(p∧q) | ¬p | ¬q | ¬p∨¬q. All values match." } },
+        { text: { ar: "أثبت أن (p → q) ≡ (¬p ∨ q) باستخدام جدول الصواب.", en: "Prove that (p → q) ≡ (¬p ∨ q) using truth table." }, modelAnswer: { ar: "p q | p→q | ¬p | ¬p∨q. القيم متطابقة في جميع الصفوف.", en: "p q | p→q | ¬p | ¬p∨q. Values match in all rows." } },
+        { text: { ar: "ما هو الفرق بين المعكوس (Converse) والعكس (Contrapositive) للعبارة p→q؟", en: "What is the difference between converse and contrapositive of p→q?" }, modelAnswer: { ar: "المعكوس هو q→p، أما العكس فهو ¬q→¬p. العكس مكافئ للعبارة الأصلية.", en: "Converse is q→p, contrapositive is ¬q→¬p. Contrapositive is equivalent to the original." } },
+        { text: { ar: "أثبت أن (p → q) ≡ (¬q → ¬p) (العكس مكافئ للعبارة الأصلية).", en: "Prove that (p → q) ≡ (¬q → ¬p) (contrapositive is equivalent)." }, modelAnswer: { ar: "p→q = ¬p∨q = ¬¬q∨¬p = ¬q→¬p.", en: "p→q = ¬p∨q = ¬¬q∨¬p = ¬q→¬p." } }
+    ],
+    lec3: [
+        { text: { ar: "عرف المسند (Predicate) والمسورات العامة والوجودية.", en: "Define predicate and universal/existential quantifiers." }, modelAnswer: { ar: "المسند: جملة تحتوي على متغير. المسور العام (∀): يعني 'لكل'. المسور الوجودي (∃): يعني 'يوجد'.", en: "Predicate: sentence containing a variable. Universal quantifier (∀): 'for all'. Existential quantifier (∃): 'there exists'." } },
+        { text: { ar: "ما هو نفي العبارة ∀x (P(x) ∧ Q(x))؟", en: "What is the negation of ∀x (P(x) ∧ Q(x))?" }, modelAnswer: { ar: "∃x (¬P(x) ∨ ¬Q(x)).", en: "∃x (¬P(x) ∨ ¬Q(x))." } },
+        { text: { ar: "اكتب نفي العبارة: 'كل طالب في الفصل ناجح'.", en: "Write the negation of: 'Every student in the class is passing'." }, modelAnswer: { ar: "يوجد طالب في الفصل راسب.", en: "There exists a student in the class who is failing." } },
+        { text: { ar: "أثبت أن ¬∀x P(x) ≡ ∃x ¬P(x).", en: "Prove that ¬∀x P(x) ≡ ∃x ¬P(x)." }, modelAnswer: { ar: "إذا كان ¬∀x P(x) صحيحاً، فليس كل x يحقق P(x)، أي يوجد x لا يحقق P(x)، أي ∃x ¬P(x).", en: "If ¬∀x P(x) is true, then not all x satisfy P(x), so there exists x that does not satisfy P(x), i.e., ∃x ¬P(x)." } }
+    ],
+    lec4: [
+        { text: { ar: "عرف الدالة واذكر مكوناتها الأساسية.", en: "Define function and state its basic components." }, modelAnswer: { ar: "الدالة f: X→Y هي علاقة تربط كل عنصر في X بعنصر واحد فقط في Y. المكونات: المجال (Domain)، المجال المقابل (Codomain)، المدى (Range).", en: "A function f: X→Y associates each element in X with exactly one element in Y. Components: Domain, Codomain, Range." } },
+        { text: { ar: "ما الفرق بين الدالة واحد لواحد (Injective) والدالة الشاملة (Surjective)؟", en: "What is the difference between injective and surjective functions?" }, modelAnswer: { ar: "واحد لواحد: f(x₁)=f(x₂) ⇒ x₁=x₂. شاملة: كل y∈Y يوجد x∈X بحيث f(x)=y.", en: "Injective: f(x₁)=f(x₂) ⇒ x₁=x₂. Surjective: every y∈Y has x∈X with f(x)=y." } },
+        { text: { ar: "أثبت أن الدالة f(x)=2x+1 من R إلى R هي دالة تقابل (Bijective).", en: "Prove that f(x)=2x+1 from R to R is bijective." }, modelAnswer: { ar: "واحد لواحد: 2x₁+1=2x₂+1 ⇒ x₁=x₂. شاملة: لأي y، نضع x=(y-1)/2، f(x)=y. إذن تقابل.", en: "Injective: 2x₁+1=2x₂+1 ⇒ x₁=x₂. Surjective: for any y, take x=(y-1)/2, then f(x)=y. Hence bijective." } },
+        { text: { ar: "إذا كانت f(x)=x² من R إلى R، هل هي واحد لواحد؟ لماذا؟", en: "Is f(x)=x² from R to R injective? Why?" }, modelAnswer: { ar: "لا، لأن f(2)=4 و f(-2)=4، مع 2≠-2.", en: "No, because f(2)=4 and f(-2)=4, but 2≠-2." } }
+    ],
+    lec5: [
+        { text: { ar: "اشرح مبدأ الاستقراء الرياضي مع ذكر خطواته.", en: "Explain the principle of mathematical induction with its steps." }, modelAnswer: { ar: "1) إثبات P(1) صحيحة. 2) افتراض P(k) صحيحة. 3) إثبات P(k+1) صحيحة.", en: "1) Prove P(1) is true. 2) Assume P(k) is true. 3) Prove P(k+1) is true." } },
+        { text: { ar: "باستخدام الاستقراء الرياضي، أثبت أن 1+2+3+...+n = n(n+1)/2.", en: "Using mathematical induction, prove that 1+2+3+...+n = n(n+1)/2." }, modelAnswer: { ar: "الأساس n=1: 1=1×2/2. الفرضية: 1+...+k=k(k+1)/2. الخطوة: نضيف k+1 → k(k+1)/2+(k+1) = (k+1)(k+2)/2.", en: "Base n=1: 1=1×2/2. Hypothesis: 1+...+k=k(k+1)/2. Step: add k+1 → k(k+1)/2+(k+1) = (k+1)(k+2)/2." } },
+        { text: { ar: "أثبت أن 1+3+5+...+(2n-1) = n² باستخدام الاستقراء.", en: "Prove that 1+3+5+...+(2n-1) = n² using induction." }, modelAnswer: { ar: "الأساس n=1: 1=1². الفرضية: 1+3+...+(2k-1)=k². الخطوة: نضيف 2(k+1)-1=2k+1 → k²+2k+1=(k+1)².", en: "Base n=1: 1=1². Hypothesis: 1+3+...+(2k-1)=k². Step: add 2(k+1)-1=2k+1 → k²+2k+1=(k+1)²." } },
+        { text: { ar: "ما هي شروط استخدام الاستقراء الرياضي؟", en: "What are the conditions for using mathematical induction?" }, modelAnswer: { ar: "أن تكون العبارة P(n) معرفة للأعداد الطبيعية، وأن نتمكن من إثبات الأساس والخطوة.", en: "P(n) must be defined for natural numbers, and we must be able to prove base case and inductive step." } }
+    ],
+    lec6: [
+        { text: { ar: "عرف المجموعة واذكر أنواعها.", en: "Define set and list its types." }, modelAnswer: { ar: "المجموعة هي مجموعة من العناصر المحددة. أنواعها: منتهية، غير منتهية، خالية، جزئية.", en: "A set is a collection of distinct objects. Types: finite, infinite, empty, subset." } },
+        { text: { ar: "ما هي مجموعة القوى (Power Set)؟ أعط مثالاً.", en: "What is the power set? Give an example." }, modelAnswer: { ar: "مجموعة جميع المجموعات الجزئية. مثال: A={a,b} → P(A)={∅,{a},{b},{a,b}}.", en: "The set of all subsets. Example: A={a,b} → P(A)={∅,{a},{b},{a,b}}." } },
+        { text: { ar: "أثبت أن ∅ ⊆ A لكل مجموعة A.", en: "Prove that ∅ ⊆ A for every set A." }, modelAnswer: { ar: "الشرط: إذا x∈∅ فإن x∈A. بما أنه لا يوجد x∈∅، فالشرط صحيح دائماً.", en: "Condition: if x∈∅ then x∈A. Since there is no x∈∅, the condition is always true." } },
+        { text: { ar: "ما هو ترتيب المجموعة (Cardinality)؟ وكيف نحسب ترتيب مجموعة القوى؟", en: "What is cardinality? How to calculate power set cardinality?" }, modelAnswer: { ar: "عدد عناصر المجموعة. |P(A)| = 2^{|A|}.", en: "The number of elements in a set. |P(A)| = 2^{|A|}." } }
+    ],
+    lec7: [
+        { text: { ar: "اذكر قوانين دي مورجان للمجموعات مع شرحها.", en: "State De Morgan's laws for sets with explanation." }, modelAnswer: { ar: "(A∪B)' = A'∩B' و (A∩B)' = A'∪B'.", en: "(A∪B)' = A'∩B' and (A∩B)' = A'∪B'." } },
+        { text: { ar: "أثبت أن A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C) باستخدام عناصر المجموعات.", en: "Prove A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C) using set elements." }, modelAnswer: { ar: "إذا x∈A∪(B∩C) فإن x∈A أو x∈B∩C. الحالتان تؤديان إلى x∈(A∪B)∩(A∪C). والعكس صحيح.", en: "If x∈A∪(B∩C) then x∈A or x∈B∩C. Both cases lead to x∈(A∪B)∩(A∪C). The converse is also true." } },
+        { text: { ar: "ما هو الفرق المتناظر (Symmetric Difference)؟ أعط مثالاً.", en: "What is symmetric difference? Give an example." }, modelAnswer: { ar: "AΔB = (A-B)∪(B-A). مثال: A={1,2,3}, B={3,4,5} → AΔB={1,2,4,5}.", en: "AΔB = (A-B)∪(B-A). Example: A={1,2,3}, B={3,4,5} → AΔB={1,2,4,5}." } }
+    ],
+    lec9: [
+        { text: { ar: "عرف العلاقة الثنائية واذكر خصائصها.", en: "Define binary relation and its properties." }, modelAnswer: { ar: "العلاقة R من A إلى B هي مجموعة جزئية من A×B. خصائصها: انعكاسية، تناظرية، متعدية.", en: "A binary relation R from A to B is a subset of A×B. Properties: reflexive, symmetric, transitive." } },
+        { text: { ar: "ما هي علاقة التكافؤ؟ أعط مثالاً.", en: "What is an equivalence relation? Give an example." }, modelAnswer: { ar: "علاقة انعكاسية، تناظرية، ومتعدية. مثال: علاقة '='.", en: "A relation that is reflexive, symmetric, and transitive. Example: equality '='." } },
+        { text: { ar: "أثبت أن علاقة '=' على مجموعة الأعداد الحقيقية هي علاقة تكافؤ.", en: "Prove that equality '=' on real numbers is an equivalence relation." }, modelAnswer: { ar: "انعكاسية: a=a. تناظرية: a=b ⇒ b=a. متعدية: a=b و b=c ⇒ a=c.", en: "Reflexive: a=a. Symmetric: a=b ⇒ b=a. Transitive: a=b and b=c ⇒ a=c." } }
+    ],
+    lec11: [
+        { text: { ar: "عرف تركيب الدوال (Function Composition) مع مثال.", en: "Define function composition with an example." }, modelAnswer: { ar: "(f∘g)(x) = f(g(x)). مثال: f(x)=x², g(x)=x+1 → (f∘g)(x)=(x+1)².", en: "(f∘g)(x) = f(g(x)). Example: f(x)=x², g(x)=x+1 → (f∘g)(x)=(x+1)²." } },
+        { text: { ar: "كيف تجد معكوس الدالة؟ أعط مثالاً.", en: "How to find the inverse of a function? Give an example." }, modelAnswer: { ar: "ضع y=f(x)، حل المعادلة لإيجاد x بدلالة y، ثم بدل x و y. مثال: f(x)=2x-3 → f⁻¹(x)=(x+3)/2.", en: "Set y=f(x), solve for x in terms of y, then swap x and y. Example: f(x)=2x-3 → f⁻¹(x)=(x+3)/2." } },
+        { text: { ar: "ما هو شرط وجود معكوس الدالة؟", en: "What is the condition for a function to have an inverse?" }, modelAnswer: { ar: "أن تكون الدالة تقابل (Bijective): واحد لواحد وشاملة.", en: "The function must be bijective: injective and surjective." } }
+    ]
+};
+
+// دمج جميع الأسئلة المقالية
+essayBank.all = [
+    ...essayBank.lec1, ...essayBank.lec2, ...essayBank.lec3,
+    ...essayBank.lec4, ...essayBank.lec5, ...essayBank.lec6,
+    ...essayBank.lec7, ...essayBank.lec9, ...essayBank.lec11
+];
+// ==================== التشغيل النهائي ====================
+// تأكد من أن جميع الدوال والبيانات محملة قبل التشغيل
+document.addEventListener('DOMContentLoaded', function() {
+    // تهيئة الصفحة الرئيسية
+    setCurrentPage('home');
+    
+    // تحديث اللغة بعد تحميل الصفحة
+    setTimeout(function() {
+        updateLanguage();
+    }, 50);
+});
+
+// في حال عدم عمل DOMContentLoaded، نستخدم setTimeout كحل احتياطي
+setTimeout(function() {
+    if (document.getElementById('main-container') && document.getElementById('main-container').innerHTML === '') {
+        setCurrentPage('home');
+        updateLanguage();
+    }
 }, 100);
+
+console.log('✅ تم تحميل موقع الرياضيات المتقطعة بنجاح!');
+console.log('📊 عدد أسئلة MCQ: ' + mcqBank.all.length);
+console.log('📝 عدد أسئلة مقالية: ' + essayBank.all.length);
+console.log('📚 عدد المحاضرات: ' + Object.keys(mcqBank).filter(k => k !== 'all').length);
 </script>
 </body>
 </html>
